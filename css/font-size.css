@@ -1,0 +1,302 @@
+@charset "utf-8"
+
+  	.fsize-1{
+ 		font-size: 1px;
+ 	}
+  	.fsize-2{
+ 		font-size: 2px;
+ 	}
+  	.fsize-3{
+ 		font-size: 3px;
+ 	}
+  	.fsize-4{
+ 		font-size: 4px;
+ 	}
+  	.fsize-5{
+ 		font-size: 5px;
+ 	}
+  	.fsize-6{
+ 		font-size: 6px;
+ 	}
+  	.fsize-7{
+ 		font-size: 7px;
+ 	}
+  	.fsize-8{
+ 		font-size: 8px;
+ 	}
+  	.fsize-9{
+ 		font-size: 9px;
+ 	}
+  	.fsize-10{
+ 		font-size: 10px;
+ 	}
+  	.fsize-11{
+ 		font-size: 11px;
+ 	}
+  	.fsize-12{
+ 		font-size: 12px;
+ 	}
+  	.fsize-13{
+ 		font-size: 13px;
+ 	}
+  	.fsize-14{
+ 		font-size: 14px;
+ 	}
+  	.fsize-15{
+ 		font-size: 15px;
+ 	}
+  	.fsize-16{
+ 		font-size: 16px;
+ 	}
+  	.fsize-17{
+ 		font-size: 17px;
+ 	}
+  	.fsize-18{
+ 		font-size: 18px;
+ 	}
+  	.fsize-19{
+ 		font-size: 19px;
+ 	}
+  	.fsize-20{
+ 		font-size: 20px;
+ 	}
+  	.fsize-21{
+ 		font-size: 21px;
+ 	}
+  	.fsize-22{
+ 		font-size: 22px;
+ 	}
+  	.fsize-23{
+ 		font-size: 23px;
+ 	}
+  	.fsize-24{
+ 		font-size: 24px;
+ 	}
+  	.fsize-25{
+ 		font-size: 25px;
+ 	}
+  	.fsize-26{
+ 		font-size: 26px;
+ 	}
+  	.fsize-27{
+ 		font-size: 27px;
+ 	}
+  	.fsize-28{
+ 		font-size: 28px;
+ 	}
+  	.fsize-29{
+ 		font-size: 29px;
+ 	}
+  	.fsize-30{
+ 		font-size: 30px;
+ 	}
+  	.fsize-31{
+ 		font-size: 31px;
+ 	}
+  	.fsize-32{
+ 		font-size: 32px;
+ 	}
+  	.fsize-33{
+ 		font-size: 33px;
+ 	}
+  	.fsize-34{
+ 		font-size: 34px;
+ 	}
+  	.fsize-35{
+ 		font-size: 35px;
+ 	}
+  	.fsize-36{
+ 		font-size: 36px;
+ 	}
+  	.fsize-37{
+ 		font-size: 37px;
+ 	}
+  	.fsize-38{
+ 		font-size: 38px;
+ 	}
+  	.fsize-39{
+ 		font-size: 39px;
+ 	}
+  	.fsize-40{
+ 		font-size: 40px;
+ 	}
+  	.fsize-41{
+ 		font-size: 41px;
+ 	}
+  	.fsize-42{
+ 		font-size: 42px;
+ 	}
+  	.fsize-43{
+ 		font-size: 43px;
+ 	}
+  	.fsize-44{
+ 		font-size: 44px;
+ 	}
+  	.fsize-45{
+ 		font-size: 45px;
+ 	}
+  	.fsize-46{
+ 		font-size: 46px;
+ 	}
+  	.fsize-47{
+ 		font-size: 47px;
+ 	}
+  	.fsize-48{
+ 		font-size: 48px;
+ 	}
+  	.fsize-49{
+ 		font-size: 49px;
+ 	}
+  	.fsize-50{
+ 		font-size: 50px;
+ 	}
+  	.fsize-51{
+ 		font-size: 51px;
+ 	}
+  	.fsize-52{
+ 		font-size: 52px;
+ 	}
+  	.fsize-53{
+ 		font-size: 53px;
+ 	}
+  	.fsize-54{
+ 		font-size: 54px;
+ 	}
+  	.fsize-55{
+ 		font-size: 55px;
+ 	}
+  	.fsize-56{
+ 		font-size: 56px;
+ 	}
+  	.fsize-57{
+ 		font-size: 57px;
+ 	}
+  	.fsize-58{
+ 		font-size: 58px;
+ 	}
+  	.fsize-59{
+ 		font-size: 59px;
+ 	}
+  	.fsize-60{
+ 		font-size: 60px;
+ 	}
+  	.fsize-61{
+ 		font-size: 61px;
+ 	}
+  	.fsize-62{
+ 		font-size: 62px;
+ 	}
+  	.fsize-63{
+ 		font-size: 63px;
+ 	}
+  	.fsize-64{
+ 		font-size: 64px;
+ 	}
+  	.fsize-65{
+ 		font-size: 65px;
+ 	}
+  	.fsize-66{
+ 		font-size: 66px;
+ 	}
+  	.fsize-67{
+ 		font-size: 67px;
+ 	}
+  	.fsize-68{
+ 		font-size: 68px;
+ 	}
+  	.fsize-69{
+ 		font-size: 69px;
+ 	}
+  	.fsize-70{
+ 		font-size: 70px;
+ 	}
+  	.fsize-71{
+ 		font-size: 71px;
+ 	}
+  	.fsize-72{
+ 		font-size: 72px;
+ 	}
+  	.fsize-73{
+ 		font-size: 73px;
+ 	}
+  	.fsize-74{
+ 		font-size: 74px;
+ 	}
+  	.fsize-75{
+ 		font-size: 75px;
+ 	}
+  	.fsize-76{
+ 		font-size: 76px;
+ 	}
+  	.fsize-77{
+ 		font-size: 77px;
+ 	}
+  	.fsize-78{
+ 		font-size: 78px;
+ 	}
+  	.fsize-79{
+ 		font-size: 79px;
+ 	}
+  	.fsize-80{
+ 		font-size: 80px;
+ 	}
+  	.fsize-81{
+ 		font-size: 81px;
+ 	}
+  	.fsize-82{
+ 		font-size: 82px;
+ 	}
+  	.fsize-83{
+ 		font-size: 83px;
+ 	}
+  	.fsize-84{
+ 		font-size: 84px;
+ 	}
+  	.fsize-85{
+ 		font-size: 85px;
+ 	}
+  	.fsize-86{
+ 		font-size: 86px;
+ 	}
+  	.fsize-87{
+ 		font-size: 87px;
+ 	}
+  	.fsize-88{
+ 		font-size: 88px;
+ 	}
+  	.fsize-89{
+ 		font-size: 89px;
+ 	}
+  	.fsize-90{
+ 		font-size: 90px;
+ 	}
+  	.fsize-91{
+ 		font-size: 91px;
+ 	}
+  	.fsize-92{
+ 		font-size: 92px;
+ 	}
+  	.fsize-93{
+ 		font-size: 93px;
+ 	}
+  	.fsize-94{
+ 		font-size: 94px;
+ 	}
+  	.fsize-95{
+ 		font-size: 95px;
+ 	}
+  	.fsize-96{
+ 		font-size: 96px;
+ 	}
+  	.fsize-97{
+ 		font-size: 97px;
+ 	}
+  	.fsize-98{
+ 		font-size: 98px;
+ 	}
+  	.fsize-99{
+ 		font-size: 99px;
+ 	}
+  	.fsize-100{
+ 		font-size: 100px;
+ 	}
