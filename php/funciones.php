@@ -1,406 +1,6 @@
 <?php
-//require_once("sql.php");
+require_once("sql.php");
 error_reporting(1);
-define('ORDERTB', 'pts desc, d desc, gf desc, gc asc, g desc, pen desc, n asc');
-function formatocod($val){
-	if($val < 10){
-		$cad = "0000".$val;
-	}else if($val >= 10 && $val < 100){
-		$cad = "000".$val;
-	}else if($val >= 100 && $val < 1000){
-		$cad = "00".$val;
-	}else if($val >= 1000 && $val < 10000){
-		$cad = "0".$val;
-	}else{
-		$cad = $val;
-	}
-	return $cad;
-}
-
-
-function color($col){
-	$c = 0;
-		$color[$c][1]= "rojo";
-		$color[$c][2]= "#FF0000";
-		$color[$c++][3]= "#F00";
-		$color[$c][1]= "azul";
-		$color[$c][2]= "#0000FF";
-		$color[$c++][3]= "#00F";
-		$color[$c][1]= "verde";
-		$color[$c][2]= "#006600";
-		$color[$c++][3]= "#060";
-		$color[$c][1]= "amarillo";
-		$color[$c][2]= "#F9B528";
-		$color[$c++][3]= "#EBA80C";
-		$color[$c][1]= "naranja";
-		$color[$c][2]= "#FF4A1E";
-		$color[$c++][3]= "#F60";
-		$color[$c][1]= "celeste";
-		$color[$c][2]= "#0066FF";
-		$color[$c++][3]= "#06F";
-		$color[$c][1]= "verdeclaro";
-		$color[$c][2]= "#669900";
-		$color[$c++][3]= "#0C0";
-		$color[$c][1]= "crema";
-		$color[$c][2]= "#FFFF99";
-		$color[$c++][3]= "#FF9";
-		$color[$c][1]= "rosa";
-		$color[$c][2]= "#FF3399";
-		$color[$c++][3]= "#F39";
-		$color[$c][1]= "azuloscuro";
-		$color[$c][2]= "#000066";
-		$color[$c++][3]= "#006";
-		$color[$c][1]= "verdeoscuro";
-		$color[$c][2]= "#002800";
-		$color[$c++][3]= "#030";
-		$color[$c][1]= "violeta";
-		$color[$c][2]= "#660099";
-		$color[$c++][3]= "#609";
-		$color[$c][1]= "marron";
-		$color[$c][2]= "#572C00";
-		$color[$c++][3]= "#630";
-		$color[$c][1]= "negro";
-		$color[$c][2]= "#000000";
-		$color[$c++][3]= "#000";
-		$color[$c][1]= "blanco";
-		$color[$c][2]= "#FFFFFF";
-		$color[$c++][3]= "#FFF";
-		$color[$c][1]= "gris";
-		$color[$c][2]= "#666666";
-		$color[$c++][3]= "#666";
-		$color[$c][1]= "marronclaro";
-		$color[$c][2]= "#BF6000";
-		$color[$c++][3]= "#AF7907";
-		$color[$c][1]= "cielo";
-		$color[$c][2]= "#C1EBFF";
-		$color[$c++][3]= "#B7FFFF";
-		$color[$c][1]= "morado";
-		$color[$c][2]= "#302903";
-		$color[$c++][3]= "#330";
-		$color[$c][1]= "grana";
-		$color[$c][2]= "#770029";
-		$color[$c++][3]= "#8D0535";
-		$color[$c][1]= "marronoscuro";
-		$color[$c][2]= "#2D0000";
-		$color[$c++][3]= "#2D0000";
-		$color[$c][1]= "piel";
-		$color[$c][2]= "#FC9";
-		$color[$c++][3]= "#FC9";
-	for($i = 0; $i < $c; $i++){
-		if($col == $color[$i][1]){
-			$r = $color[$i][2];
-			break;
-		}
-	}
-	return $r;
-	
-}
-
-function stylcolor($col){
-	$c = 0;
-	$r = "";
-		$color[$c][1]= "rojo";
-		$color[$c][2]= "#FF0000";
-		$color[$c++][3]= "#F00";
-		$color[$c][1]= "azul";
-		$color[$c][2]= "#0000FF";
-		$color[$c++][3]= "#00F";
-		$color[$c][1]= "verde";
-		$color[$c][2]= "#006600";
-		$color[$c++][3]= "#060";
-		$color[$c][1]= "amarillo";
-		$color[$c][2]= "#F9B528";
-		$color[$c++][3]= "#EBA80C";
-		$color[$c][1]= "naranja";
-		$color[$c][2]= "#FF4A1E";
-		$color[$c++][3]= "#F60";
-		$color[$c][1]= "celeste";
-		$color[$c][2]= "#0066FF";
-		$color[$c++][3]= "#06F";
-		$color[$c][1]= "verdeclaro";
-		$color[$c][2]= "#669900";
-		$color[$c++][3]= "#6C0";
-		$color[$c][1]= "crema";
-		$color[$c][2]= "#FFFF99";
-		$color[$c++][3]= "#FF9";
-		$color[$c][1]= "rosa";
-		$color[$c][2]= "#FF3399";
-		$color[$c++][3]= "#F39";
-		$color[$c][1]= "azuloscuro";
-		$color[$c][2]= "#000066";
-		$color[$c++][3]= "#006";
-		$color[$c][1]= "verdeoscuro";
-		$color[$c][2]= "#002800";
-		$color[$c++][3]= "#030";
-		$color[$c][1]= "violeta";
-		$color[$c][2]= "#660099";
-		$color[$c++][3]= "#609";
-		$color[$c][1]= "marron";
-		$color[$c][2]= "#572C00";
-		$color[$c++][3]= "#630";
-		$color[$c][1]= "negro";
-		$color[$c][2]= "#000000";
-		$color[$c++][3]= "#000";
-		$color[$c][1]= "blanco";
-		$color[$c][2]= "#FFFFFF";
-		$color[$c++][3]= "#FFF";
-		$color[$c][1]= "gris";
-		$color[$c][2]= "#666666";
-		$color[$c++][3]= "#666";
-		$color[$c][1]= "marronclaro";
-		$color[$c][2]= "#BF6000";
-		$color[$c++][3]= "#AF7907";
-		$color[$c][1]= "cielo";
-		$color[$c][2]= "#C1EBFF";
-		$color[$c++][3]= "#B7FFFF";
-		$color[$c][1]= "morado";
-		$color[$c][2]= "#302903";
-		$color[$c++][3]= "#330";
-		$color[$c][1]= "grana";
-		$color[$c][2]= "#770029";
-		$color[$c++][3]= "#8D0535";
-		$color[$c][1]= "marronoscuro";
-		$color[$c][2]= "#2D0000";
-		$color[$c++][3]= "#2D0000";
-		$color[$c][1]= "piel";
-		$color[$c][2]= "#FC9";
-		$color[$c++][3]= "#FC9";
-	for($i = 0; $i < $c; $i++){
-		if($col == $color[$i][1]){
-			$r = $color[$i][3];
-			break;
-		}
-	}
-	return $r;
-	
-}
-
-function stylrgb($col){
-	$c = 0;
-	$r = "";
-		$color[$c][1]= "rojo";
-		$color[$c][2]= "#FF0000";
-		$color[$c++][3]= "255,0,0";
-		$color[$c][1]= "azul";
-		$color[$c][2]= "#0000FF";
-		$color[$c++][3]= "0,0,255";
-		$color[$c][1]= "verde";
-		$color[$c][2]= "#006600";
-		$color[$c++][3]= "0,102,0";
-		$color[$c][1]= "amarillo";
-		$color[$c][2]= "#F9B528";
-		$color[$c++][3]= "245,184,0";
-		$color[$c][1]= "naranja";
-		$color[$c][2]= "#FF4A1E";
-		$color[$c++][3]= "255,102,0";
-		$color[$c][1]= "celeste";
-		$color[$c][2]= "#0066FF";
-		$color[$c++][3]= "0,102,255";
-		$color[$c][1]= "verdeclaro";
-		$color[$c][2]= "#669900";
-		$color[$c++][3]= "102,204,0";
-		$color[$c][1]= "crema";
-		$color[$c][2]= "#FFFF99";
-		$color[$c++][3]= "255,255,153";
-		$color[$c][1]= "rosa";
-		$color[$c][2]= "#FF3399";
-		$color[$c++][3]= "255,102,153";
-		$color[$c][1]= "azuloscuro";
-		$color[$c][2]= "#000066";
-		$color[$c++][3]= "0,0,102";
-		$color[$c][1]= "verdeoscuro";
-		$color[$c][2]= "#002800";
-		$color[$c++][3]= "0,51,0";
-		$color[$c][1]= "violeta";
-		$color[$c][2]= "#660099";
-		$color[$c++][3]= "102,0,153";
-		$color[$c][1]= "marron";
-		$color[$c][2]= "#572C00";
-		$color[$c++][3]= "102,51,0";
-		$color[$c][1]= "negro";
-		$color[$c][2]= "#000000";
-		$color[$c++][3]= "0,0,0";
-		$color[$c][1]= "blanco";
-		$color[$c][2]= "#FFFFFF";
-		$color[$c++][3]= "255,255,255";
-		$color[$c][1]= "gris";
-		$color[$c][2]= "#666666";
-		$color[$c++][3]= "153,153,153";
-		$color[$c][1]= "marronclaro";
-		$color[$c][2]= "#BF6000";
-		$color[$c++][3]= "204,153,0";
-		$color[$c][1]= "cielo";
-		$color[$c][2]= "#C1EBFF";
-		$color[$c++][3]= "204,255,255";
-		$color[$c][1]= "morado";
-		$color[$c][2]= "#302903";
-		$color[$c++][3]= "102,102,0";
-		$color[$c][1]= "grana";
-		$color[$c][2]= "#770029";
-		$color[$c++][3]= "102,0,51";
-		$color[$c][1]= "marronoscuro";
-		$color[$c][2]= "#2D0000";
-		$color[$c++][3]= "45,0,0";
-		$color[$c][1]= "piel";
-		$color[$c][2]= "#FC9";
-		$color[$c++][3]= "252,9,NaN";
-	for($i = 0; $i < $c; $i++){
-		if($col == $color[$i][1]){
-			$r = $color[$i][3];
-			break;
-		}
-	}
-	return $r;
-	
-}
-
-
-function getChanels(){
-	$c = 0;
-		$color[$c][1]= "rojo";
-		$color[$c][2]= "#FF0000";
-		$color[$c++][3]= "255,0,0";
-		$color[$c][1]= "azul";
-		$color[$c][2]= "#0000FF";
-		$color[$c++][3]= "0,0,255";
-		$color[$c][1]= "verde";
-		$color[$c][2]= "#006600";
-		$color[$c++][3]= "0,102,0";
-		$color[$c][1]= "amarillo";
-		$color[$c][2]= "#F9B528";
-		$color[$c++][3]= "245,184,0";
-		$color[$c][1]= "naranja";
-		$color[$c][2]= "#FF4A1E";
-		$color[$c++][3]= "255,102,0";
-		$color[$c][1]= "celeste";
-		$color[$c][2]= "#0066FF";
-		$color[$c++][3]= "0,102,255";
-		$color[$c][1]= "verdeclaro";
-		$color[$c][2]= "#669900";
-		$color[$c++][3]= "102,204,0";
-		$color[$c][1]= "crema";
-		$color[$c][2]= "#FFFF99";
-		$color[$c++][3]= "255,255,153";
-		$color[$c][1]= "rosa";
-		$color[$c][2]= "#FF3399";
-		$color[$c++][3]= "255,102,153";
-		$color[$c][1]= "azuloscuro";
-		$color[$c][2]= "#000066";
-		$color[$c++][3]= "0,0,102";
-		$color[$c][1]= "verdeoscuro";
-		$color[$c][2]= "#002800";
-		$color[$c++][3]= "0,51,0";
-		$color[$c][1]= "violeta";
-		$color[$c][2]= "#660099";
-		$color[$c++][3]= "102,0,153";
-		$color[$c][1]= "marron";
-		$color[$c][2]= "#572C00";
-		$color[$c++][3]= "102,51,0";
-		$color[$c][1]= "negro";
-		$color[$c][2]= "#000000";
-		$color[$c++][3]= "0,0,0";
-		$color[$c][1]= "blanco";
-		$color[$c][2]= "#FFFFFF";
-		$color[$c++][3]= "255,255,255";
-		$color[$c][1]= "gris";
-		$color[$c][2]= "#666666";
-		$color[$c++][3]= "153,153,153";
-		$color[$c][1]= "marronclaro";
-		$color[$c][2]= "#BF6000";
-		$color[$c++][3]= "204,153,0";
-		$color[$c][1]= "cielo";
-		$color[$c][2]= "#C1EBFF";
-		$color[$c++][3]= "204,255,255";
-		$color[$c][1]= "morado";
-		$color[$c][2]= "#302903";
-		$color[$c++][3]= "102,102,0";
-		$color[$c][1]= "grana";
-		$color[$c][2]= "#770029";
-		$color[$c++][3]= "102,0,51";
-		$color[$c][1]= "marronoscuro";
-		$color[$c][2]= "#2D0000";
-		$color[$c++][3]= "45,0,0";
-		return $color;
-}
-	
-	function paleta(){
-		$c = 0;
-		$color[$c][1]= "rojo";
-		$color[$c][2]= "#FF0000";
-		$color[$c++][3]= "#F00";
-		$color[$c][1]= "azul";
-		$color[$c][2]= "#0000FF";
-		$color[$c++][3]= "#00F";
-		$color[$c][1]= "verde";
-		$color[$c][2]= "#006600";
-		$color[$c++][3]= "#060";
-		$color[$c][1]= "amarillo";
-		$color[$c][2]= "#F9B528";
-		$color[$c++][3]= "#EBA80C";
-		$color[$c][1]= "naranja";
-		$color[$c][2]= "#FF4A1E";
-		$color[$c++][3]= "#F60";
-		$color[$c][1]= "celeste";
-		$color[$c][2]= "#0066FF";
-		$color[$c++][3]= "#06F";
-		$color[$c][1]= "verdeclaro";
-		$color[$c][2]= "#669900";
-		$color[$c++][3]= "#6C0";
-		$color[$c][1]= "crema";
-		$color[$c][2]= "#FFFF99";
-		$color[$c++][3]= "#FF9";
-		$color[$c][1]= "rosa";
-		$color[$c][2]= "#FF3399";
-		$color[$c++][3]= "#F39";
-		$color[$c][1]= "azuloscuro";
-		$color[$c][2]= "#000066";
-		$color[$c++][3]= "#006";
-		$color[$c][1]= "verdeoscuro";
-		$color[$c][2]= "#002800";
-		$color[$c++][3]= "#030";
-		$color[$c][1]= "violeta";
-		$color[$c][2]= "#660099";
-		$color[$c++][3]= "#609";
-		$color[$c][1]= "marron";
-		$color[$c][2]= "#572C00";
-		$color[$c++][3]= "#630";
-		$color[$c][1]= "negro";
-		$color[$c][2]= "#000000";
-		$color[$c++][3]= "#000";
-		$color[$c][1]= "blanco";
-		$color[$c][2]= "#FFFFFF";
-		$color[$c++][3]= "#FFF";
-		$color[$c][1]= "gris";
-		$color[$c][2]= "#666666";
-		$color[$c++][3]= "#666";
-		$color[$c][1]= "marronclaro";
-		$color[$c][2]= "#BF6000";
-		$color[$c++][3]= "#AF7907";
-		$color[$c][1]= "cielo";
-		$color[$c][2]= "#C1EBFF";
-		$color[$c++][3]= "#B7FFFF";
-		$color[$c][1]= "morado";
-		$color[$c][2]= "#302903";
-		$color[$c++][3]= "#330";
-		$color[$c][1]= "grana";
-		$color[$c][2]= "#770029";
-		$color[$c++][3]= "#8D0535";
-		$color[$c][1]= "marronoscuro";
-		$color[$c][2]= "#2D0000";
-		$color[$c++][3]= "#2D0000";
-		$color[$c][1]= "piel";
-		$color[$c][2]= "#FC9";
-		$color[$c++][3]= "#FC9";
-		
-		return $color;
-	}
-	
-	
-
-
-
-
-
 
 function php_html($texto){
    $texto = htmlentities($texto, ENT_NOQUOTES, 'UTF-8'); // Convertir caracteres especiales a entidades
@@ -441,6 +41,7 @@ function newfoto($directorio, $file, $foto){
 
 
 function saveFile($directorio, $file, $name){
+	$foto = NULL;
 	$ext = array(
 		'.png',
 		'.jpg',
@@ -468,6 +69,24 @@ function saveFile($directorio, $file, $name){
 	}
 	return $foto;
 }
+
+function createDir($dir){
+	if(!file_exists($dir)){
+		return mkdir($dir, 0777, true);
+	}else{
+		return false;
+	}
+}
+
+function fileExists($url){
+
+}
+
+function getNameDir($name){
+	return str_replace(' ', '_', $name);
+}
+
+
 
 function setfoto($directorio, $file, $foto){
 	
@@ -719,16 +338,6 @@ return '@-moz-keyframes '.$animacion.' {
 }
 
 
-function textBorder($col, $size){
-	return '-webkit-text-stroke-width:'.$size.'px;
-	-webkit-text-stroke-color:'.stylcolor($col).';
-	-moz-text-stroke-width:'.$size.'px;
-	-moz-text-stroke-color:'.stylcolor($col).';
-	-ms-text-stroke-width:'.$size.'px;
-	-ms-text-stroke-color:'.stylcolor($col).';
-	-o-text-stroke-width:'.$size.'px;
-	-o-text-stroke-color:'.stylcolor($col).';';
-}
 
 
 function readTxt($archivo_txt){
@@ -823,6 +432,32 @@ function getImagen($url, $name){
 
 
 
+function scrollBar($obj){
+	return $obj.'::-webkit-scrollbar{
+	 width: 7px;
+			 
+	}
+				
+	'.$obj.'::-webkit-scrollbar-button{
+		width:5px;
+		height: 10px;
+	}
+	
+	'.$obj.'::-webkit-scrollbar-track{
+		 border:thin solid #fff;
+		-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+		-webkit-border-radius: 1px;
+		border-radius: 1px;
+	}
+				
+	'.$obj.'::-webkit-scrollbar-thumb{
+		 -webkit-box-shadow: inset 0 1px 0 rgba(255,255,225,.5),inset 1px 0 0 rgba(255,255,255,.4),inset 0 1px 2px rgba(255,255,255,.3);
+		border:thin solid #fff;
+		border-radius: 1px;
+		-webkit-border-radius: 1px;
+		background:rgba(0, 0, 0, .3);
+	}';
+}
 
 
 
@@ -844,10 +479,31 @@ function decode($reg){
 	return array_map('html_entity_decode', $reg);
 }
 
+function desencripter($encrypt){
+	return utf8_encode(base64_decode($encrypt));
+}
+
 function cache(){
 	return '?'.rand(0, 1000).'.'.rand(0, 1000).'.'.rand(0, 1000);
 }
 
 //****************************************************************************************************************************************************
+
+function dateFormat($fecha, $formato){
+	$parts = explode('/', $fecha); ///dd/mm/yyy h:m:s
+	$rest = explode(' ', $parts[2]);
+	$dia = $parts[0];
+	$mes = $parts[1];
+	$anio = $rest[0];
+	$hora = $rest[1];
+	$fecha = $anio.'-'.$mes.'-'.$dia.' '.$hora;
+	return date_format(date_create($fecha), $formato);
+	
+}
+
+
+function base64JsonDecode($json){
+	return utf8_encode(base64_decode($json));
+}
 
 

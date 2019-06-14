@@ -1,0 +1,22 @@
+Charly@Charly-PC-W10 MINGW64 /c/xampp/htdocs/myeditor (master)
+$ git remote add origin https://github.com/charlyzzgit/myeditor.git
+
+Charly@Charly-PC-W10 MINGW64 /c/xampp/htdocs/myeditor (master)
+$ git remote -v
+origin  https://github.com/charlyzzgit/myeditor.git (fetch)
+origin  https://github.com/charlyzzgit/myeditor.git (push)
+
+Charly@Charly-PC-W10 MINGW64 /c/xampp/htdocs/myeditor (master)
+$ git push origin master
+Enumerating objects: 212, done.
+Counting objects: 100% (212/212), done.
+Delta compression using up to 2 threads
+Compressing objects: 100% (206/206), done.
+Writing objects: 100% (212/212), 1.14 MiB | 256.00 KiB/s, done.
+Total 212 (delta 49), reused 0 (delta 0)
+remote: Resolving deltas: 100% (49/49), done.
+To https://github.com/charlyzzgit/myeditor.git
+ * [new branch]      master -> master
+
+Charly@Charly-PC-W10 MINGW64 /c/xampp/htdocs/myeditor (master)
+$

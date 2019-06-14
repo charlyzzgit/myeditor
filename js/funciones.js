@@ -921,6 +921,10 @@ function base64Encode(data){
 	return btoa(data)
 }
 
+function base64Decode(data){
+	return atob(data)
+}
+
 
 function setVisibility(obj, v){
 	if(v){
@@ -1306,6 +1310,52 @@ function clasiEstado(eqs, eq){
 	}
 
 	return est;
+}
+
+function ver(logs){
+ 	console.log(logs)
+ }
+
+ function exists(cadena, subcadena){
+ 	if(cadena.indexOf(subcadena) != -1){
+ 		return true
+ 	}
+ 	return false
+ }
+
+ function isMobile(){
+	
+	var mobile = {
+      Android: function() {
+        return navigator.userAgent.match(/Android/i);
+      },
+      BlackBerry: function() {
+        return navigator.userAgent.match(/BlackBerry/i);
+      },
+      iOS: function() {
+        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+      },
+      Opera: function() {
+        return navigator.userAgent.match(/Opera Mini/i);
+      },
+      Windows: function() {
+        return navigator.userAgent.match(/IEMobile/i);
+      },
+      any: function() {
+        return (mobile.Android() || mobile.BlackBerry() || mobile.iOS() || mobile.Opera() || mobile.Windows());
+      }
+    }
+
+    if(mobile.any() != null){
+    	return true
+    }
+
+    return false
+
+}
+
+function getRootLocation(dir){
+	return window.location.href.split(dir)[0] + dir
 }
 
 

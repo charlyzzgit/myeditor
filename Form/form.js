@@ -8,7 +8,8 @@
 					requiredText: 'Requerido',
 					requiredColor: 'text-danger',
 					requiredSize: 12,
-					requiredInput: 'alert-danger'
+					requiredInput: 'alert-danger',
+					minimize: false
 					
 				},
 				opc = $.extend(options, uiOptions),
@@ -63,26 +64,32 @@
 			    	
 					var input = $(btn).closest('.input-group').find('input'),
 						n = parseInt(input.val()),
-						h = parseInt(btn.hasClass('min') ? input.prop('min') : input.prop('max'))
+						h = parseInt(btn.hasClass('min') ? input.prop('min') : input.prop('max')),
+						callBack = input.data('exe'),
+						step = '' + input.data('step')
+						var increment = (step.indexOf('.') != -1) ? parseFloat(step) : parseInt(step)
 					timer = setInterval(function(){
 							if(btn.hasClass('min')){
-								n--
+								n -= increment
 															
 								if(n < h){
 									n = h
 								}
 							}else{
-								n++
+								n += increment
 															
 								if(n > h){
 									n = h
 								}
 							}
 							
-							console.log('num', n)							
+							//console.log('num', n)
+							if(step.indexOf('.') != -1){
+								input.val(n.toFixed(2)) 
+							}						
 							input.val(n)
 							try{
-								window[callback(n, index)].call
+								window[callBack(n, input.data('data'))].call
 							}catch(e){}
 
 															
@@ -120,6 +127,9 @@
 									  .val(opc.value)
 									  .html(opc.name)
 									  .prop('selected', (opc.value == input.value) ? true : false)
+								if(opc.class != null){
+									option.addClass(opc.class)
+								}
 								box.find('select').append(option)
 							})
 							box.find('select')
@@ -141,14 +151,35 @@
                         						<label class="custom-control-label"></label>\
                       						</div>')
 								option.find('input')
-													.prop('id', opc.name + '-' + index)
+													.prop('id', input.name + '-' + index)
 													.val(opc.value)
-													.prop('checked', (opc.value = input.value) ? true : false)
+													.prop('checked', (opc.value == input.value) ? true : false)
+													.click(function(){
+														var inp = $(this),
+															callBack = inp.data('exe'),
+															data = inp.data('data'),
+															val = inp.val()
+														try{
+															window[callBack(val, data)].call
+														}catch(e){}
+													})
 								option.find('label')
-													.prop('for', opc.name + '-' + index)
-													.html(opc.name)		
+													.prop('for', input.name + '-' + index)
+													.html(opc.name)
+
+								if(opc.class != null){
+									option.addClass(opc.class)
+								}		
 
 								box.append(option)
+								if(input.inline != null){
+									box.addClass('flex-row-start-center')
+									box.find('.custom-radio').addClass('ml-3')
+									box.find('.form-lbl').addClass('mr-3')
+								}
+
+
+								
 							})
 							
 						break
@@ -164,6 +195,17 @@
 												.prop('type', 'checkbox')
 												.prop('id', 'form-' + input.name)
 												.prop('checked', (input.checked != null) ? input.checked : false)
+												.click(function(){
+													console.log('click checkbox')
+													var callBack = $(this).data('exe'),
+    												data = $(this).data('data'),
+    												value = $(this).prop('checked')
+	    											try{
+														window[callBack(value, data)].call
+													}catch(e){
+														console.log('Exception checkbox:', e)
+													}
+												})
 								box.find('.custom-checkbox label')
 																  .prop('for', 'form-' + input.name)
 																  .html(input.label)
@@ -177,7 +219,17 @@
 												.prop('type', 'checkbox')
 												.prop('id', 'form-' + input.name + '-' + index)
 												.prop('checked', (chk.checked != null) ? chk.checked : false)
-												//.val(chk.name)
+												.click(function(){
+													console.log('click checkbox')
+													var callBack = $(this).data('exe'),
+    												data = $(this).data('data'),
+    												value = $(this).prop('checked')
+	    											try{
+														window[callBack(value, data)].call
+													}catch(e){
+														console.log('Exception checkbox:', e)
+													}
+												})
 									row.find('.custom-control-label')
 																  .prop('for', 'form-' + input.name + '-' + index)
 																  .html(chk.name)
@@ -201,20 +253,33 @@
 											.data('on-text', onText)
 											.data('off-text', offText)
 											.on('switchChange.bootstrapSwitch', function(event, state) {
-    											
-  											}).bootstrapSwitch('state', (input.checked) ? input.checked : false)
+    											var callBack = $(this).data('exe'),
+    												data = $(this).data('data')
+    											try{
+													window[callBack(state, data)].call
+												}catch(e){}
+  											}).bootstrapSwitch('state', (input.checked != null) ? input.checked : false)
   							box.addClass('flex-col-start-start')
 						break
 
 						case 'image':
 							var noImage = 'Form/noimage.png',
 								src = (input.src != null) ? (input.src != '' ? input.src : noImage) : noImage 
-							box.find('.form-lbl').after('<div class="col-12 p-0">\
+							box.find('.form-lbl').after('<div class="box-file col-12 p-0">\
 														<img class="img-thumbnail form-hand">\
-														<input type="file" class="input-file">\
+														<input type="file" class="input-file bg-dark">\
 														</div>')
-							box.find('img').prop('src', src).prop('width', (input.size != null) ? input.size : 50)
+							box.find('img').prop('src', src).prop('width', (input.size != null) ? input.size : 100)
 							box.find('input').change(function(){
+								var file = $(this)[0].files[0],
+									callBack = $(this).data('exe'),
+									data = $(this).data('data')
+								try{
+									window[callBack(file, data)].call
+								}catch(e){
+									console.log('Exception: Imagen ', e)
+								}
+
 								upLoadImage($(this))
 							})
 
@@ -230,6 +295,14 @@
 							box.find('input')
 											.prop('id', 'file-' + input.name)
 											.change(function(){
+												var file = $(this)[0].files[0],
+													callBack = $(this).data('exe'),
+													data = $(this).data('data')
+												try{
+													window[callBack(file, data)].call
+												}catch(e){
+													console.log('Exception: File ', e)
+												}
 												upLoadFile($(this))
 											})
 
@@ -256,6 +329,7 @@
 													window[callBack(val, data)].call
 												}catch(e){}
 											})
+							
 						break
 						case 'spinner':
 
@@ -273,6 +347,20 @@
 											.prop('max', (input.max != null) ? input.max : 1000000)
 											.data('step', (input.step != null) ? input.step : 1)
 											.val(input.value)
+											.keyup(function(){
+												var inp = $(this),
+													callBack = inp.data('exe'),
+													data = inp.data('data'),
+													val = inp.val()
+													
+												try{
+													window[callBack(val, data)].call
+												}catch(e){
+													
+													//console.log('Exception spinner:', callBack, e)
+												}
+											})
+											
 							box.find('button').prop('type', 'button').mousedown(function(evt){
 								evt.preventDefault()
 								maxMin($(this))
@@ -325,11 +413,33 @@
 				                          <input type="text" class="form-control">\
 				                          <span class="input-group-addon input-group-text"><i></i></span>\
 				                      </div>')
-							box.find('input').val((input.value != null) ? input.value : '#000000')
+							box.find('input')
+											.val((input.value != null) ? input.value : '#000000')
+											// .change(function(){
+											// 	var inp = $(this),
+											// 		callBack = inp.data('exe'),
+											// 		data = inp.data('data'),
+											// 		val = inp.val()
+											// 	try{
+											// 		window[callBack(val, data)].call
+											// 	}catch(e){}
+											// })
 							box.find('#' + 'color-' + input.name).colorpicker({
 					            //color: (input.value != null) ? input.value : '#000000',
 					            format: (input.format != null) ? input.format : 'hex'
-					        })
+
+					        }).on('changeColor', function(ev) {
+					                
+					                var inp = $(ev.target).closest('.form-group').find('input'),
+										callBack = inp.data('exe'),
+										data = inp.data('data'),
+										val = inp.val()
+									try{
+										window[callBack(val, data)].call
+									}catch(e){}
+					           });
+
+
 
 
 						break
@@ -363,6 +473,13 @@
 						break
 						
 					}
+					// if(input.width != null){
+					// 	switch(type){
+					// 		case 'text': case 'number': case 'select':
+					// 			box.find('input, select').css('width', input.width + 'px !important')
+					// 		break
+					// 	}
+					// }
 					
 					if(type == 'submit'){
 						box.html(input.label)
@@ -370,12 +487,12 @@
 
 					box.find('.form-lbl').html(input.label)
 					box.find(':input')
-									.prop('disabled', (input.disabled != null) ? true : false)
+									.prop('disabled', (input.disabled != null) ? input.disabled : false)
 									.data('exe', input.callBack)
 									.data('data', JSON.stringify(input.data))
 					
 					if(type != 'submit' && type != 'button'){
-						box.find('input')
+						box.find('input, select, textarea')
 						.prop('name', input.name)
 						.prop('required', (input.required != null) ? true : false)
 					}				
@@ -387,6 +504,12 @@
 						req.css('font-size', opc.requiredSize + 'px')
 						box.find('.form-lbl').after(req)
 					}
+
+					if(input.label == null){
+						box.find('.form-lbl').remove()
+					}
+
+					
 					return box
 				}
 
@@ -550,16 +673,25 @@
 					
 				}
 
+
+
 				$.each(opc.inputs, function (index, input) { 
 					$('#' + input.box).append(getInput(input))
 				})
 
 				
-				
+				if(opc.minimize){
+					$(form).find('input, select, button').addClass('mini-control')
+					$('.min, .max').addClass('mini-button')
+					$('.form-lbl').addClass('min-label')
+					$('.form-group, .input-group').addClass('m-bot')
+					//$('.small-input').addClass('small-input-min')
+
+				}
 				 
      
 				    
-			})
+			}) //fin return
 
 		}//fin form
 

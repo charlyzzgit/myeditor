@@ -2,7 +2,7 @@ function Modal(options){
 	this.modal = $('<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">\
                   <div class="modal-dialog">\
                         <div class="modal-content">\
-                              <div class="modal-header flex-row-start-center bg-danger">\
+                              <div class="modal-header flex-row-start-center">\
                                 <h4 class="modal-title text-white upper-case" id="title"></h4>\
                                 <button id="close" class="close" data-dismiss="modal" aria-label="Close">\
                                 	<i class="fa fa-times text-white"></i>\
@@ -16,10 +16,12 @@ function Modal(options){
                         </div>\
                       </div>\
                 </div>')
+  this.bg = (options.bg != null) ? options.bg : 'bg-secondary'
   this.title = (options.title != null) ? options.title : 'Titulo'
   this.size = (options.size != null) ? options.size : 'sm'
   this.classSize = 'md'
   this.callBack = (options.callBack != null) ? options.callBack : null
+  this.modal.find('.modal-header').addClass(this.bg)
 	this.modal.find('#title').html(this.title)
 	switch(this.size){
     case 'small': this.classSize = 'modal-sm'; break;

@@ -12,8 +12,10 @@
     left:0;
     cursor: pointer; 
     width: 100%;
-    height: 100%
+    min-height: 100px
 }
+
+
 
 .form-hand{
     cursor: pointer;
@@ -27,7 +29,36 @@
     max-width: 45px !important;
 }
 
+.small-input-min{
+    max-width: 30px !important;
+}
+
 .spinner-input::-webkit-inner-spin-button, .spinner-input::-webkit-outer-spin-button { 
       -webkit-appearance: none; 
       margin: 0; 
+}
+
+.form-group{
+    width: 100%
+}
+
+.mini-control{
+    height: 30px !important;
+    padding: 2px 4px
+}
+
+.mini-button{
+    width: 30px !important;
+    padding: 2px
+}
+
+.m-bot{
+    margin-bottom: 4px !important;
+}
+
+
+.min-label{
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 1px
 }

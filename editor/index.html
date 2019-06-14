@@ -26,11 +26,13 @@
   <link rel="stylesheet" type="text/css" href="../Form/form.css?0.0.11">
 	<link rel="stylesheet" type="text/css" href="../css/flex.css?0.0.3">
   <link rel="stylesheet" type="text/css" href="../css/estilos.css?0.0.0">
+  <link rel="stylesheet" href="../iconos/css/all.css">
     
 </head>
 
 <body>
   <div class="container-fluid">
+      <div id="loading" class="flex-row-center-center"><img></div>
       <header class="bg-info"></header>
       <nav class="bg-secondary"></nav>
       <section id="editor" class="content">
@@ -41,17 +43,25 @@
   </div>
 </body>
 <script src="../js/jquery-2.1.3.min.js"></script>
+<script>
+  //$.widget.bridge('uibutton', $.ui.button)
+  var EDITOR = 1
+</script>
+<script src="../js/Popper.js"></script>
 <script src="../bootstrap/js/bootstrap.min.js"></script>
-<script src="../js/funciones.js"></script>
-<script src="../js/ajax.js"></script>
 <script src="../Form/colorpicker/bootstrap-colorpicker.min.js"></script>
 <script src="../Form/moment/moment.js"></script>
 <script src="../Form/datetimepicker/datetimepicker.js"></script>
 <script src="../Form/select2/select2.min.js"></script>
 <script src="../Form/sweetAlert/sweetalert.min.js"></script>
 <script src="../Form/Switch/bootstrap-switch.js"></script>
-<script src="../Form/form.js?0.0.30"></script>
+<script src="../js/funciones.js"></script>
+<script src="../js/ajax.js"></script>
+<script src="../Form/form.js?0.0.4"></script>
 <script src="../Form/Modal/modal.js"></script>
+<script src="../js/css.js?0.0.0.1"></script>
+<script src="../js/icons.js"></script>
+<script src="../js/fonts.js"></script>
 <script src="../js/main.js"></script>
 <script>
     'use strict'
