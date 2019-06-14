@@ -22,20 +22,9 @@
  	var tag = '<?php print($tag); ?>',
  		box = '<?php print($box); ?>',
  		options = [],
- 		insert = 0
+ 		insert = box == 'col' ? 1 : 0
 
- 	function getMediaButton(name){
- 		var div = $('<div class="media flex-row-center-center"><button class="btn btn-warning"></button></div>')
- 		div.css({
- 			position: 'absolute', 
- 			top:0, 
- 			left:0, 
- 			zIndex:100, 
- 			background: 'rgba(0, 0, 0, .8)'
- 		})
- 		div.find('button').html(name)
- 		return div
- 	}
+ 	
  	function getInsert(tag){
 
  		var elem = null
@@ -115,14 +104,22 @@
  			break
 
  			case 'audio':
- 			alert('audio')
- 				elem = $('<audio controls class="small-audio">\
+ 			
+ 				elem = $('<audio controls class="audio-small d-block">\
 						Su Navegador no soporta Audio.\
 						</audio>')
- 				elem.mouseover(function(){
- 					OBJ.append(getMediaButton('Editar'))
- 				}).mouseout(function(){
- 					OBJ.find('.media').remove()
+ 				elem.mouseenter(function(){
+ 					setMediaEditor($(this), 'Editar')
+ 				})
+ 				
+
+ 				
+ 			break
+
+ 			case 'iframe':
+ 				elem = $('<iframe frameborder="0" class="video video-small" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>')
+ 				elem.mouseenter(function(){
+ 					setMediaEditor($(this), 'Editar')
  				})
  			break
  		}

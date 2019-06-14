@@ -44,7 +44,7 @@
 		{name: 'Lista', tag: 'ul', icon:'fa fa-list-ul'},
 		{name: 'Tabla', tag: 'table', icon:'fa fa-table'},
 		{name: 'Imágen', tag: 'img', icon:'fa fa-image'},
-		{name: 'Video', tag: 'video', icon:'fa fa-video'},
+		{name: 'Video', tag: 'iframe', icon:'fa fa-video'},
 		{name: 'Audio', tag: 'audio', icon:'fa fa-volume-up'},
 		{name: 'Linea', tag: 'hr', icon:''},
 		{name: 'Icono', tag: 'icon', icon:'fa fa-user'}
@@ -74,7 +74,7 @@
 			{name: 'Texto Enriquecido', tag: 'p', icon:'fa fa-paragraph'},
 			{name: 'Link', tag: 'a', icon:'fa fa-link'},
 			{name: 'Imágen', tag: 'img', icon:'fa fa-image'},
-			{name: 'Video', tag: 'video', icon:'fa fa-video'},
+			{name: 'Video', tag: 'iframe', icon:'fa fa-video'},
 			{name: 'Audio', tag: 'audio', icon:'fa fa-volume-up'},
 			{name: 'Linea', tag: 'hr', icon:''},
 			{name: 'Icono', tag: 'icon', icon:'fa fa-user'}

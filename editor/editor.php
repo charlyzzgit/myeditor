@@ -109,7 +109,7 @@
 
 
 </style>
-
+<div id="media-editor" class="flex-row-center-center"><button class="btn btn-warning"></button></div>
 <div id="modal-edit" class="col-12 flex-col-start-start bg-white">
 	<div class="header bg-primary col-12 flex-row-between-center text-white p-1">
 		<span class="name">Elemento</span>
@@ -366,6 +366,32 @@
 					
 				]
 			break
+
+			case 'audio':
+				menu = [
+					{name: 'audio', value:'audio'},
+					{name: 'borde', value:'border'},
+					{name: 'margen', value:'margin'},
+					{name: 'relleno', value:'padding'},
+					{name: 'sombra', value:'shadow'},
+					{name: 'Redondear', value:'radius'},
+					{name: 'insertar', value:'insert'},
+					{name: 'eliminar', value:'delete'}
+				]
+			break
+
+			case 'iframe':
+				menu = [
+					{name: 'video', value:'video'},
+					{name: 'borde', value:'border'},
+					{name: 'margen', value:'margin'},
+					{name: 'sombra', value:'shadow'},
+					{name: 'Redondear', value:'radius'},
+					{name: 'insertar', value:'insert'},
+					{name: 'eliminar', value:'delete'}
+				]
+			break
+
 
 
 		}
@@ -818,6 +844,54 @@
 	 			css.push({name: 'background', value: obj.css('background')})
 	 			
 	 		break
+
+	 		case 'audio':
+	 			css.push({name: 'background', value: obj.css('background')})
+	 			css.push({name: 'borderTopColor', value: obj.css('borderTopColor')})
+	 			css.push({name: 'borderTopWidth', value: obj.css('borderTopWidth')})
+	 			css.push({name: 'borderTopStyle', value: obj.css('borderTopStyle')})
+	 			css.push({name: 'borderBottomColor', value: obj.css('borderBottomColor')})
+	 			css.push({name: 'borderBottomWidth', value: obj.css('borderBottomWidth')})
+	 			css.push({name: 'borderBottomStyle', value: obj.css('borderBottomStyle')})
+	 			css.push({name: 'borderLeftColor', value: obj.css('borderLeftColor')})
+	 			css.push({name: 'borderLeftWidth', value: obj.css('borderLeftWidth')})
+	 			css.push({name: 'borderLeftStyle', value: obj.css('borderLeftStyle')})
+	 			css.push({name: 'borderRightColor', value: obj.css('borderRightColor')})
+	 			css.push({name: 'borderRightWidth', value: obj.css('borderRightWidth')})
+	 			css.push({name: 'borderRightStyle', value: obj.css('borderRightStyle')})
+	 			css.push({name: 'paddingTop', value: obj.css('paddingTop')})
+	 			css.push({name: 'paddingBottom', value: obj.css('paddingBottom')})
+	 			css.push({name: 'paddingLeft', value: obj.css('paddingLeft')})
+	 			css.push({name: 'paddingRight', value: obj.css('paddingRight')})
+	 			css.push({name: 'marginTop', value: obj.css('marginTop')})
+	 			css.push({name: 'marginBottom', value: obj.css('marginBottom')})
+	 			css.push({name: 'marginLeft', value: obj.css('marginLeft')})
+	 			css.push({name: 'marginRight', value: obj.css('marginRight')})
+	 			css.push({name: 'boxShadow', value: obj.css('boxShadow')})
+	 			css.push({name: 'borderRadius', value: obj.css('borderRadius')})		
+	 		break
+
+	 		case 'iframe':
+	 			
+	 			css.push({name: 'borderTopColor', value: obj.css('borderTopColor')})
+	 			css.push({name: 'borderTopWidth', value: obj.css('borderTopWidth')})
+	 			css.push({name: 'borderTopStyle', value: obj.css('borderTopStyle')})
+	 			css.push({name: 'borderBottomColor', value: obj.css('borderBottomColor')})
+	 			css.push({name: 'borderBottomWidth', value: obj.css('borderBottomWidth')})
+	 			css.push({name: 'borderBottomStyle', value: obj.css('borderBottomStyle')})
+	 			css.push({name: 'borderLeftColor', value: obj.css('borderLeftColor')})
+	 			css.push({name: 'borderLeftWidth', value: obj.css('borderLeftWidth')})
+	 			css.push({name: 'borderLeftStyle', value: obj.css('borderLeftStyle')})
+	 			css.push({name: 'borderRightColor', value: obj.css('borderRightColor')})
+	 			css.push({name: 'borderRightWidth', value: obj.css('borderRightWidth')})
+	 			css.push({name: 'borderRightStyle', value: obj.css('borderRightStyle')})
+	 			css.push({name: 'marginTop', value: obj.css('marginTop')})
+	 			css.push({name: 'marginBottom', value: obj.css('marginBottom')})
+	 			css.push({name: 'marginLeft', value: obj.css('marginLeft')})
+	 			css.push({name: 'marginRight', value: obj.css('marginRight')})
+	 			css.push({name: 'boxShadow', value: obj.css('boxShadow')})
+	 			css.push({name: 'borderRadius', value: obj.css('borderRadius')})		
+	 		break
 	 	}
 
 	 	//ver(['family', obj.css('fontFamily'), getFontIndex(obj.css('fontFamily'))])
@@ -856,6 +930,8 @@
 	 				}
 	 			})
 	 			return list
+	 		case 'audio':
+	 			return null;
 	 		default:
 	 			return obj.text()
 	 	}
@@ -884,7 +960,7 @@
 	 function getSrc(obj){
 	 	var tag = obj.prop('tagName').toLowerCase()
 	 	switch(tag){
-	 		case 'img':
+	 		case 'img': case 'audio': case 'iframe':
 	 			return obj.prop('src')
 	 		break
 	 		case 'a':
@@ -1094,7 +1170,7 @@
 	 }else{
 	 	$('#tool-tema').hide()
 	 }
-	
+	$('#media-editor').hide()
 	 setTema()
 	 
 	 

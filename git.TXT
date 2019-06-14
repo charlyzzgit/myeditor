@@ -20,3 +20,6 @@ To https://github.com/charlyzzgit/myeditor.git
 
 Charly@Charly-PC-W10 MINGW64 /c/xampp/htdocs/myeditor (master)
 $
+
+
+para corregir error cuando no deja hacer el add.... rm -f .git/index.lock

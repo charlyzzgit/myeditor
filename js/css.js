@@ -15,6 +15,35 @@ function getColorChanels(rgba){
 	
 }
 
+function setMediaEditor(obj, name){
+ 		OBJ = $(obj)
+
+ 		var div = $('#media-editor')
+ 		div.css({
+ 			position: 'absolute', 
+ 			top:OBJ.offset().top, 
+ 			left:OBJ.offset().left, 
+ 			width:OBJ.width(),
+ 			height: OBJ.height(),
+ 			zIndex:30, 
+ 			background: 'rgba(0, 0, 0, .8)'
+ 		})
+ 		div.find('button').html(name)
+
+ 		div.find('button')
+ 			.unbind('click')
+ 			.click(function(evt){
+ 				evt.stopPropagation()
+		 		setMenu(OBJ.prop('tagName').toLowerCase())
+		 		$(this).parent().hide()
+				openEditor(true)
+ 			})
+ 		div.mouseleave(function(){
+	 			$(this).hide()
+	 		}).show()
+ 		
+ 	}
+
 function cssExists(sty, val){
 	return (sty.search(val) != -1) ? true : false
 }
@@ -522,6 +551,28 @@ function addElements(elements, col, smart){
 					obj = getList(el.content)
 					
 				break
+
+				case 'audio':
+					obj = $('<audio controls class="audio-small d-block">\
+						Su Navegador no soporta Audio.\
+						</audio>')
+					if(EDITOR != 0){
+		 				obj.mouseenter(function(){
+		 					setMediaEditor($(this), 'Editar')
+		 				})
+		 			}
+		 			obj.prop('src', el.url)
+				break
+				case 'iframe':
+	 				obj = $('<iframe frameborder="0" class="video video-small" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>')
+	 				if(EDITOR != 0){
+		 				obj.mouseenter(function(){
+		 					setMediaEditor($(this), 'Editar')
+		 				})
+		 			}
+		 			obj.prop('src', el.url)
+	 			break
+
 	 		}
 	 		if(EDITOR != 0){
 		 		obj

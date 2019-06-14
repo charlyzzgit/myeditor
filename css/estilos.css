@@ -129,6 +129,47 @@ body{
     width: 100% !important;
 }
 
+.audio-small{
+  width: 200px;
+}
+
+.audio-medium{
+  width: 500px;
+}
+
+.audio-big{
+  width: 700px;
+}
+
+.video{
+    background-image: url(../img/iconos/youtube.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center
+}
+
+
+
+.video-small{
+  width: 400px;
+  height: 225px
+}
+
+.video-medium{
+  width: 640px;
+  height: 360px
+}
+
+.video-big{
+  width: 1000px;
+  height: 560px
+}
+
+.video-full{
+  width: 100%;
+  height: auto
+}
+
 table th, table td {
      vertical-align: middle !important;
      padding: 8px
@@ -138,6 +179,26 @@ table th, table td {
    overflow-x: auto
 }
 
+@media screen and (max-width: 1024px){
+  .video-big{
+     width: 90%;
+    height: auto
+  }
+}
+
+@media screen and (max-width: 760px){
+    .audio-big{
+      width: 90%;
+    }
+}
+
+@media screen and (max-width: 640px){
+    .video-medium{
+        width: 90%;
+        height: auto
+      }
+ } 
+
 @media screen and (max-width: 470px){
     .img-medium{
       width: 300px !important;
@@ -145,6 +206,15 @@ table th, table td {
 
     .img-big{
       width: 400px !important;
+    }
+
+    .audio-medium{
+      width: 75%;
+    }
+
+    .video-small{
+      width: 90%;
+      height:auto
     }
 }
 
