@@ -475,117 +475,121 @@ function getVideoSize(img){
 	return size
 }
 
-function addElements(elements, col, smart){
-	 	$.each(elements, function(index, el){
-	 		var tag = el.tag.toLowerCase(),
-	 			obj = null
-	 		switch(tag){
-	 			case 'span':
-	 			case 'h1':
-		 		case 'h2':
-		 		case 'h3':
-		 		case 'h4':
-		 		case 'h5':
-		 		case 'h6':
-				case 'i':
-				case 'em':
-				case 'small':
-				case 'strong':
-				case 's':
-				case 'cite':
-				case 'q':
-				case 'u':
-				case 'code':
-				case 'sup':
-				case 'sub':
-				case 'var':
-				case 'time':
-				case 'mark': 
-					obj = $('<' + tag + '></' + tag + '>')
-					if(smart != ''){
-						obj.text(el.content)
-					}else{
-						obj.html(el.content)
-					}
-				break
-				case 'p':
-					obj = $('<' + tag + '></' + tag + '>')
-					obj.html(base64Decode(el.content))
-				break	
+// function addElements(elements, col, smart){
+// 	 	$.each(elements, function(index, el){
+// 	 		var tag = el.tag.toLowerCase(),
+// 	 			obj = null
+// 	 		switch(tag){
+// 	 			case 'span':
+// 	 			case 'h1':
+// 		 		case 'h2':
+// 		 		case 'h3':
+// 		 		case 'h4':
+// 		 		case 'h5':
+// 		 		case 'h6':
+// 				case 'i':
+// 				case 'em':
+// 				case 'small':
+// 				case 'strong':
+// 				case 's':
+// 				case 'cite':
+// 				case 'q':
+// 				case 'u':
+// 				case 'code':
+// 				case 'sup':
+// 				case 'sub':
+// 				case 'var':
+// 				case 'time':
+// 				case 'mark': 
+// 					obj = $('<' + tag + '></' + tag + '>')
+// 					if(smart != ''){
+// 						obj.text(el.content)
+// 					}else{
+// 						obj.html(el.content)
+// 					}
+// 				break
+// 				case 'p':
+// 					obj = $('<' + tag + '></' + tag + '>')
+// 					try{
+// 						obj.html(base64Decode(el.content))
+// 					}catch(e){
+// 						obj.html(el.content)
+// 					}
+// 				break	
 
 				
-				case 'img':
-					obj = $('<img>')
-					obj.prop('src', el.url)
-				break
-				case 'a':
-					obj = $('<a></a>')
-					obj
-						.prop('href', el.url)
-						.text(el.content)
-						.data('type', el.link)
-						.data('url', el.url)
-						.click(function(evt){
-							evt.preventDefault()
-							if(EDITOR == 0){
-								window.open($(this).data('url'), "_blank")
-							}
-						})
-				break
-				case 'table':
-					ver(['table', el.content])
-					obj = getTable(el.content)
-				break
-				case 'ul':
+// 				case 'img':
+// 					obj = $('<img>')
+// 					obj.prop('src', el.url)
+// 				break
+// 				case 'a':
+// 					obj = $('<a></a>')
+// 					obj
+// 						.prop('href', el.url)
+// 						.text(el.content)
+// 						.data('type', el.link)
+// 						.data('url', el.url)
+// 						.click(function(evt){
+// 							evt.preventDefault()
+// 							if(EDITOR == 0){
+// 								window.open($(this).data('url'), "_blank")
+// 							}
+// 						})
+// 				break
+// 				case 'table':
+// 					ver(['table', el.content])
+// 					obj = getTable(el.content)
+// 				break
+// 				case 'ul':
 					
-					obj = getList(el.content)
+// 					obj = getList(el.content)
 					
-				break
+// 				break
 
-				case 'audio':
-					obj = $('<div class="media-box"><audio controls class="media d-block">\
-						Su Navegador no soporta Audio.\
-						</audio></div>')
-					if(EDITOR != 0){
+// 				case 'audio':
+// 					obj = $('<div class="media-box"><audio controls class="media d-block">\
+// 						Su Navegador no soporta Audio.\
+// 						</audio></div>')
+// 					if(EDITOR != 0){
 		 				
-		 				setMediaEditor(obj)
-		 			}
-		 			obj.find('.media').prop('src', el.url)
-				break
-				case 'iframe':
-	 				obj = $('<div class="media-box"><iframe frameborder="0" class="media video" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe></div>')
-	 				if(EDITOR != 0){
+// 		 				setMediaEditor(obj)
+// 		 			}
+// 		 			obj.find('.media').prop('src', el.url)
+// 				break
+// 				case 'iframe':
+// 	 				obj = $('<div class="media-box"><iframe frameborder="0" class="media video" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe></div>')
+// 	 				if(EDITOR != 0){
 		 				
-		 				setMediaEditor(obj)
-		 			}
-		 			obj.find('.media').prop('src', el.url)
-	 			break
+// 		 				setMediaEditor(obj)
+// 		 			}
+// 		 			obj.find('.media').prop('src', el.url)
+// 	 			break
 
-	 		}
-	 		if(EDITOR != 0){
-		 		obj
-		 			.addClass('editable')
-		 			.data('toggle','tooltip')
-				    .prop('title', 'Click para Editar ' + obj.prop('tagName'))
-				    .tooltip()
-				}
-			obj.addClass(el.clases)
-			if(obj.hasClass('media-box')){
-				obj.find('.media').prop('id', 'element-' + el.id)
-	 			setCss(obj.find('.media'), el.estilos)
-			}else{
-				obj.prop('id', 'element-' + el.id)
-	 			setCss(obj, el.estilos)
-			}
+// 	 		}
+// 	 		if(EDITOR != 0){
+// 		 		obj
+// 		 			.addClass('editable')
+// 		 			.data('toggle','tooltip')
+// 				    .prop('title', 'Click para Editar ' + obj.prop('tagName'))
+// 				    .tooltip()
+// 				}
+// 			obj.addClass(el.clases)
+// 			if(obj.hasClass('media-box')){
+// 				obj.find('.media').prop('id', 'element-' + el.id)
+// 	 			setCss(obj.find('.media'), el.estilos)
+// 			}else{
+// 				obj.prop('id', 'element-' + el.id)
+// 	 			setCss(obj, el.estilos)
+// 			}
 			
-	 		if(tag == 'table'){
-	 			var tb = obj
-	 			obj = $('<div class="col-12 scroll-table"></div>')
-	 			obj.append(tb)
-	 		}
-	 		col.append(obj)
-	 	})
-	 }
+// 	 		if(tag == 'table'){
+// 	 			var tb = obj
+// 	 			obj = $('<div class="col-12 scroll-table"></div>')
+// 	 			obj.append(tb)
+// 	 		}
+// 	 		col.append(obj)
+// 	 	})
+// 	 }
 
 function getList(list){
 	var ul = $('<ul></ul>')
@@ -598,19 +602,19 @@ function getList(list){
  			ul.append(li)
  		}
 	}else{
-		$.each(list.items, function(i, data){
-			var li = $('<li class="flex-row-start-center"></li>')
-			li.append('<i></i>')
- 			li.append('<span></span>')
- 			li.find('span').text(base64Decode(data.text))
- 			li.find('i').addClass(data.icon)
- 			ul.append(li)
-		})
+		// $.each(list.items, function(i, data){
+		// 	var li = $('<li class="flex-row-start-center"></li>')
+		// 	li.append('<i></i>')
+ 	// 		li.append('<span></span>')
+ 	// 		li.find('span').text(base64Decode(data.text))
+ 	// 		li.find('i').addClass(data.icon)
+ 	// 		ul.append(li)
+		// })
 
-		setCss(ul.find('span'), list.estilos_text)
-		setCss(ul.find('i'), list.estilos_icon)
-		ul.find('span').addClass(list.class_text)
-		ul.find('i').addClass(list.class_icon)
+		// setCss(ul.find('span'), list.estilos_text)
+		// setCss(ul.find('i'), list.estilos_icon)
+		// ul.find('span').addClass(list.class_text)
+		// ul.find('i').addClass(list.class_icon)
 	}
 	ul.data('elem', 'span')
 	return ul
@@ -636,57 +640,57 @@ function getTable(tb){
 			}
 		}
 	}else{
-		$.each(tb, function(i, row){
-			var tr = $('<tr></tr>')
-			$.each(row.cells, function(j, cell){
-				var td = (i == 0) ? $('<th></th>') : $('<td></td>')
-				$.each(cell.elements, function(e, el){
-					cell.elements[e].content = base64Decode(el.content)
-				})
-				addElements(cell.elements, td, 'table')
-				setCss(td, cell.estilos)
-				td.addClass(cell.clases)
-				tr.append(td)
-			})
-			if(i == 0){
-				table.find('thead').append(tr)
-			}else{
-				table.find('tbody').append(tr)
-			}
-		})
+		// $.each(tb, function(i, row){
+		// 	var tr = $('<tr></tr>')
+		// 	$.each(row.cells, function(j, cell){
+		// 		var td = (i == 0) ? $('<th></th>') : $('<td></td>')
+		// 		$.each(cell.elements, function(e, el){
+		// 			cell.elements[e].content = base64Decode(el.content)
+		// 		})
+		// 		addElements(cell.elements, td, 'table')
+		// 		setCss(td, cell.estilos)
+		// 		td.addClass(cell.clases)
+		// 		tr.append(td)
+		// 	})
+		// 	if(i == 0){
+		// 		table.find('thead').append(tr)
+		// 	}else{
+		// 		table.find('tbody').append(tr)
+		// 	}
+		// })
 
-		if(EDITOR != 0){
-				table.find('th span')
- 								.addClass('editable')
- 								//.prop('id', 'element-0')
-					 			.data('toggle','tooltip')
-								.prop('title', 'Click para Editar Texto')
-								.tooltip()
-								.data('only-text', 1)
-					 			// .click(function(evt){
-							 	// 	evt.stopPropagation()
-							 	// 	OBJ = $(this)
+		// if(EDITOR != 0){
+		// 		table.find('th span')
+ 	// 							.addClass('editable')
+ 	// 							//.prop('id', 'element-0')
+		// 			 			.data('toggle','tooltip')
+		// 						.prop('title', 'Click para Editar Texto')
+		// 						.tooltip()
+		// 						.data('only-text', 1)
+		// 			 			// .click(function(evt){
+		// 					 	// 	evt.stopPropagation()
+		// 					 	// 	OBJ = $(this)
 
-							 	// 	setMenu('title')
+		// 					 	// 	setMenu('title')
 							 		
-									// openEditor(true)
-							 	// })
+		// 							// openEditor(true)
+		// 					 	// })
 
- 				table.find('th, td')
- 								.addClass('editable')
- 								//.prop('id', 'element-0')
-					 			.data('toggle','tooltip')
-								.prop('title', 'Click para Insertar Contenido')
-								.tooltip()
-					 			.click(function(evt){
-							 		evt.stopPropagation()
-							 		OBJ = $(this)
+ 	// 			table.find('th, td')
+ 	// 							.addClass('editable')
+ 	// 							//.prop('id', 'element-0')
+		// 			 			.data('toggle','tooltip')
+		// 						.prop('title', 'Click para Insertar Contenido')
+		// 						.tooltip()
+		// 			 			.click(function(evt){
+		// 					 		evt.stopPropagation()
+		// 					 		OBJ = $(this)
 
-							 		setMenu(OBJ.prop('tagName').toLowerCase())
+		// 					 		setMenu(OBJ.prop('tagName').toLowerCase())
 							 		
-									openEditor(true)
-							 	})
-			}
+		// 							openEditor(true)
+		// 					 	})
+		// 	}
 	}
 
 	return table

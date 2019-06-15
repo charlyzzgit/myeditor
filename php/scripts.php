@@ -119,6 +119,7 @@ function saveColumna($col, $idfila, $tema){
     $sql->addCampo('distribution', $col['distribution']);
     $sql->addCampo('clases', $col['clases']);
     $sql->addCampo('estilos', toJson($col['estilos']));
+    $sql->addCampo('content', setContent($col['content']));
     if($id == 0){
 		$id = $sql->insert('columnas');
 	}else{
@@ -127,14 +128,14 @@ function saveColumna($col, $idfila, $tema){
 	}
 
 	if($sql->getSuccess()){
-		$elements = $col['elements'];
-		foreach ($elements as $key => $el) {
-			$save = saveElement($el, $idfila, $id, $tema);
-			$success = getJson($save);
-			if($success['result'] != SUCCESS){
-				return $save;
-		    }
-		}
+		// $elements = $col['elements'];
+		// foreach ($elements as $key => $el) {
+		// 	$save = saveElement($el, $idfila, $id, $tema);
+		// 	$success = getJson($save);
+		// 	if($success['result'] != SUCCESS){
+		// 		return $save;
+		//     }
+		// }
 		return toJson(array('result' => SUCCESS));
 	}else{
 		return toJson(array('result' => 'ERROR', 'message' => 'Error en Columna: '.$sql->getError()));

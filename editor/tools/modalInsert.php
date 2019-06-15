@@ -54,6 +54,7 @@
  			break
  			case 'p':
  				elem = $('<' + tag + '>Nuevo Texto Enriquecido</' + tag + '>')
+ 				elem.addClass('multi-text')
  			break
  			case 'icon':
  				elem = $('<i class="icon-editor fas fa-user"></i>')
@@ -71,7 +72,7 @@
  				//elem.addClass('table-bordered table-striped')
  				elem.find('th span')
  								.addClass('editable')
- 								//.prop('id', 'element-0')
+ 								.addClass('th')
 					 			.data('toggle','tooltip')
 								.prop('title', 'Click para Editar Texto')
 								.tooltip()

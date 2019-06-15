@@ -193,7 +193,7 @@
 
 	ver(['tema', TEMA])	
 	function setMenu(tag){
-		
+
 		$('#menu-bar').empty()
 		switch(tag){
 			case 'root':
@@ -242,8 +242,7 @@
 			case 'sub':
 			case 'var':
 			case 'time':
-			case 'mark':
-			case 'p':
+			case 'mark': 
 				menu = [
 					{name: 'texto', value:'text'},
 					{name: 'fondo', value:'background'},
@@ -269,31 +268,21 @@
 						
 					]
 				}
-				if(OBJ.hasClass('th')){
-					menu = [
-						{name: 'texto', value:'text'}
-
-					]
-				}
-
-				if(OBJ.hasClass('multi-text')){
-					
-					menu = [
-						{name: 'texto', value:'text'},
-						{name: 'multitexto', value:'textEditor'},
-						{name: 'fondo', value:'background'},
-						{name: 'borde', value:'border'},
-						{name: 'margen', value:'margin'},
-						{name: 'relleno', value:'padding'},
-						{name: 'sombra', value:'shadow'},
-						{name: 'insertar', value:'insert'},
-						{name: 'eliminar', value:'delete'}
-						
-					]
-				}
 
 			break
-			
+			case 'p':
+				menu = [
+					{name: 'texto', value:'text'},
+					{name: 'multitexto', value:'textEditor'},
+					{name: 'fondo', value:'background'},
+					{name: 'borde', value:'border'},
+					{name: 'margen', value:'margin'},
+					{name: 'relleno', value:'padding'},
+					{name: 'sombra', value:'shadow'},
+					{name: 'insertar', value:'insert'},
+					{name: 'eliminar', value:'delete'},
+				]
+			break
 			case 'img':
 				menu = [
 					{name: 'imagen', value:'image'},
@@ -658,11 +647,9 @@
 			}
 		}
 
-		
-		col.find('.col-content').html(base64Decode(column.content))
-		if(EDITOR != 0){
-			setElements(col.find('.col-content'))
-		}
+		addElements(elements, col.find('.col-content'), '')
+		//col.find('.col-content').html(base64Decode(column.content))
+
 		if(n > cols){
 			col.hide()
 		}
@@ -708,7 +695,6 @@
 	 	row.prop('id', 'fila-' + id)
 	 	row.data('cols', cols)
 	 	row.find('.title').html(title)
-	 	setCss(row.find('.title'), fila.estilos_titulo)
 	 	if(EDITOR != 0){
 	 		row.find('.title').addClass('editable')
 	 	}
@@ -766,15 +752,14 @@
 	 		tag = 'fila'
 	 	}else if(obj.hasClass('col-content')){
 	 		tag = 'column'
-	 	}else if(obj.hasClass('editable')){
+	 	}else if(obj.hasClass('editable') || obj.hasClass('media')){
 	 		tag = obj.prop('tagName').toLowerCase()
 	 	}
 	 	
 	 		//ver(['getcss', tag, obj.text(), obj.css('color')])
 	 	
-	 	ver(['css', tag , obj.html()])
+	 	
 	 	switch(tag){
-
 	 		case 'root':
 	 			css.push({name: 'background', value: obj.css('background')})
 	 			css.push({name: 'paddingTop', value: obj.css('paddingTop')})
@@ -804,9 +789,29 @@
 	 			css.push({name: 'borderRadius', value: obj.css('borderRadius')})		
 	 			
 	 		break
-	 		default:
-
-	 			css.push({name: 'fontFamily', value: getFontIndex(obj.css('fontFamily'))})
+	 		case 'span':
+ 			case 'h1':
+	 		case 'h2':
+	 		case 'h3':
+	 		case 'h4':
+	 		case 'h5':
+	 		case 'h6':
+			case 'i':
+			case 'em':
+			case 'small':
+			case 'strong':
+			case 's':
+			case 'cite':
+			case 'q':
+			case 'u':
+			case 'code':
+			case 'sup':
+			case 'sub':
+			case 'var':
+			case 'time':
+			case 'mark': 
+			case 'a':
+				css.push({name: 'fontFamily', value: getFontIndex(obj.css('fontFamily'))})
 				css.push({name: 'fontSize', value: obj.css('fontSize')})
 				css.push({name: 'letterSpacing', value: obj.css('letterSpacing')})
 				css.push({name: 'fontWeight', value: obj.css('fontWeight')})
@@ -823,104 +828,204 @@
 	 			css.push({name: 'marginRight', value: obj.css('marginRight')})
 	 			css.push({name: 'boxShadow', value: obj.css('boxShadow')})
 	 			css.push({name: 'borderRadius', value: obj.css('borderRadius')})		
+	 		break
+	 		case 'img':
+	 			css.push({name: 'marginTop', value: obj.css('marginTop')})
+	 			css.push({name: 'marginBottom', value: obj.css('marginBottom')})
+	 			css.push({name: 'marginLeft', value: obj.css('marginLeft')})
+	 			css.push({name: 'marginRight', value: obj.css('marginRight')})
+	 			css.push({name: 'boxShadow', value: obj.css('boxShadow')})
+	 			css.push({name: 'borderRadius', value: obj.css('borderRadius')})
+	 			css.push({name: 'width', value: obj.css('width')})
 
 	 		break
-	 		
+
+	 		case 'th': case 'td':
+	 			css.push({name: 'textAlign', value: obj.css('textAlign')})
+	 			css.push({name: 'verticalAlign', value: obj.css('verticalAlign')})
+	 			css.push({name: 'background', value: obj.css('background')})
+	 			
+	 		break
+
+	 		case 'audio':
+	 			css.push({name: 'background', value: obj.css('background')})
+	 			css.push({name: 'borderTopColor', value: obj.css('borderTopColor')})
+	 			css.push({name: 'borderTopWidth', value: obj.css('borderTopWidth')})
+	 			css.push({name: 'borderTopStyle', value: obj.css('borderTopStyle')})
+	 			css.push({name: 'borderBottomColor', value: obj.css('borderBottomColor')})
+	 			css.push({name: 'borderBottomWidth', value: obj.css('borderBottomWidth')})
+	 			css.push({name: 'borderBottomStyle', value: obj.css('borderBottomStyle')})
+	 			css.push({name: 'borderLeftColor', value: obj.css('borderLeftColor')})
+	 			css.push({name: 'borderLeftWidth', value: obj.css('borderLeftWidth')})
+	 			css.push({name: 'borderLeftStyle', value: obj.css('borderLeftStyle')})
+	 			css.push({name: 'borderRightColor', value: obj.css('borderRightColor')})
+	 			css.push({name: 'borderRightWidth', value: obj.css('borderRightWidth')})
+	 			css.push({name: 'borderRightStyle', value: obj.css('borderRightStyle')})
+	 			css.push({name: 'paddingTop', value: obj.css('paddingTop')})
+	 			css.push({name: 'paddingBottom', value: obj.css('paddingBottom')})
+	 			css.push({name: 'paddingLeft', value: obj.css('paddingLeft')})
+	 			css.push({name: 'paddingRight', value: obj.css('paddingRight')})
+	 			css.push({name: 'marginTop', value: obj.css('marginTop')})
+	 			css.push({name: 'marginBottom', value: obj.css('marginBottom')})
+	 			css.push({name: 'marginLeft', value: obj.css('marginLeft')})
+	 			css.push({name: 'marginRight', value: obj.css('marginRight')})
+	 			css.push({name: 'boxShadow', value: obj.css('boxShadow')})
+	 			css.push({name: 'borderRadius', value: obj.css('borderRadius')})		
+	 		break
+
+	 		case 'iframe':
+	 			
+	 			css.push({name: 'borderTopColor', value: obj.css('borderTopColor')})
+	 			css.push({name: 'borderTopWidth', value: obj.css('borderTopWidth')})
+	 			css.push({name: 'borderTopStyle', value: obj.css('borderTopStyle')})
+	 			css.push({name: 'borderBottomColor', value: obj.css('borderBottomColor')})
+	 			css.push({name: 'borderBottomWidth', value: obj.css('borderBottomWidth')})
+	 			css.push({name: 'borderBottomStyle', value: obj.css('borderBottomStyle')})
+	 			css.push({name: 'borderLeftColor', value: obj.css('borderLeftColor')})
+	 			css.push({name: 'borderLeftWidth', value: obj.css('borderLeftWidth')})
+	 			css.push({name: 'borderLeftStyle', value: obj.css('borderLeftStyle')})
+	 			css.push({name: 'borderRightColor', value: obj.css('borderRightColor')})
+	 			css.push({name: 'borderRightWidth', value: obj.css('borderRightWidth')})
+	 			css.push({name: 'borderRightStyle', value: obj.css('borderRightStyle')})
+	 			css.push({name: 'marginTop', value: obj.css('marginTop')})
+	 			css.push({name: 'marginBottom', value: obj.css('marginBottom')})
+	 			css.push({name: 'marginLeft', value: obj.css('marginLeft')})
+	 			css.push({name: 'marginRight', value: obj.css('marginRight')})
+	 			css.push({name: 'boxShadow', value: obj.css('boxShadow')})
+	 			css.push({name: 'borderRadius', value: obj.css('borderRadius')})		
+	 		break
 	 	}
 
-	 
+	 	//ver(['family', obj.css('fontFamily'), getFontIndex(obj.css('fontFamily'))])
 
 	 	return css
 	 	
 	 }
 
-	 
+	 function getContent(obj){
 
-
-	 
-	 function setElements(col){
-	 	col.children().each(function(index){
-	 		var obj = $(this),
-	 			tag = obj.prop('tagName').toLowerCase()
+	 	var tag = obj.prop('tagName').toLowerCase()
+	 	//alert(tag + ' = ' + obj.text())
+	 	switch(tag){
+	 		case 'table': 
+	 			return ''
+	 		case 'ul':
+	 			var list = {
+	 				items: [], 
+	 				
+	 				class_i: obj.find('i').prop('class'),
+	 				class_text: obj.find('span').prop('class'), 
+	 				estilos_icon: [],
+	 				estilos_text: [], 
+	 			}
 	 			
-		 		switch(tag){
-		 		
-					
-					case 'p':
-						if(obj.html() != ''){
-							obj.addClass('multi-text')
-						}else{
-							obj.remove()
-						}
-					break	
-
-					
-					
-				
-
-					case 'div':
-						if(obj.hasClass('media-box')){
-							obj.find('.media-click').click(function(evt){
-									evt.stopPropagation()
-									OBJ = $(this).closest('.media-box').find('.media')
-									setMenu(OBJ.prop('tagName').toLowerCase())
-									$(this).parent()
-									openEditor(true)
-								})
-						}
-						if(obj.hasClass('scroll-table')){
-							obj = obj.find('table')
-							var thead = obj.find('thead'), 
-								tbody = obj.find('tbody')
-							thead.find('tr th').each(function(){
-								var obj = $(this)
-								setTooltip(obj)
-								obj.children().each(function(){
-									$(this).addClass('th') //sacar despues de corregir el add en insert
-									setTooltip($(this))
-								})
-							})
-							tbody.find('tr td').each(function(){
-								var obj = $(this)
-								setTooltip(obj)
-								obj.children().each(function(){
-									
-									setTooltip($(this))
-								})
-							})
-							
-						}
-
-
-
-					break
-					
-
-		 		}
-
-		 		setTooltip(obj)
-		 		
-			 
-	 	})
-	 }
-
-	 function setTooltip(obj){
+	 			obj.find('li').each(function(index){
+	 				var li = $(this)
+	 				list.items.push({
+	 					icon: li.find('i').prop('class'), 
+	 					text: base64Encode(li.find('span').text())
+	 				})
+	 				if(index == 0){
+	 					
+	 					list.estilos_icon =  getEstiloList(li.find('i'))
+	 					list.estilos_text =  getEstiloList(li.find('span'))
+	 					
+						
+	 				}
+	 			})
+	 			return list
+	 		case 'audio': case 'iframe':
+	 			return null;
+	 		case 'p': 
+	 			return base64Encode(obj.html());
+	 		default:
+	 			return obj.text()
+	 	}
 	 	
-		obj
-			.addClass('editable')
-			.data('toggle','tooltip')
-			.prop('title', 'Click para Editar ' + obj.prop('tagName'))
-			.tooltip()
-		
+	 		
 	 }
 
-	 function addFlag(box){
-	 	box.children().each(function(){
-	 		if($(this).hasClass('editable')){
-	 			$(this).addClass('eddittable')
-	 		}
-	 		addFlag($(this))
+	
+	 function getEstiloList(obj){
+	 	var css = []
+	 	css.push({name: 'fontFamily', value: getFontIndex(obj.css('fontFamily'))})
+		css.push({name: 'fontSize', value: obj.css('fontSize')})
+		css.push({name: 'letterSpacing', value: obj.css('letterSpacing')})
+		css.push({name: 'fontWeight', value: obj.css('fontWeight')})
+		css.push({name: 'textFillColor', value: obj.css('textFillColor')})
+		css.push({name: 'textShadow', value: obj.css('textShadow')})
+		css.push({name: 'textStrokeColor', value: obj.css('textStrokeColor')})
+		css.push({name: 'textStrokeWidth', value: obj.css('textStrokeWidth')})
+		css.push({name: 'fontStyle', value: obj.css('fontStyle')})
+		css.push({name: 'textTransform', value: obj.css('textTransform')})
+		css.push({name: 'textDecoration', value: obj.css('textDecoration')})
+
+		return css
+	 }
+
+	 function getSrc(obj){
+	 	var tag = obj.prop('tagName').toLowerCase()
+	 	switch(tag){
+	 		case 'img': case 'audio': case 'iframe':
+	 			return obj.prop('src')
+	 		break
+	 		case 'a':
+	 			return obj.prop('href')
+	 		break
+	 		default:
+	 			return null
+	 		break
+	 	}
+	 	
+	 }
+
+	 function getTableContent(tb){
+	 	var table = []
+	 	tb.find('tr').each(function(index){
+	 		var cells = []
+	 		$(this).find('th, td').each(function(c){
+	 			var elements = [], 
+	 				td = $(this), 
+	 				estilosTd = getCss(td)
+	 			td.removeClass('editable selected')
+	 			$(this).children().each(function(e){
+	 				//$(this).removeClass('editable selected') //en caso de un div caja
+	 				var clases = $(this).prop('class'),
+	 					el = $(this).hasClass('media-box') ? $(this).find('.media') : $(this),
+	 					idelement = el.prop('id').split('element-')[1],
+	 					estilos = getCss(el)
+	 				el.removeClass('editable selected')
+	 				elements.push({
+	 					id: idelement,
+	 					numero: e + 1,	
+	 					clases: clases,	
+	 					estilos: estilos,
+	 					tag: el.prop('tagName'),	
+	 					content: base64Encode(getContent(el)),
+	 					table: getTableContent(el),
+	 					url: getSrc(el),
+	 					link: el.data('type')
+	 				})
+	 				//ver(['encode', getContent(el), base64Encode(getContent(el))])
+	 			})
+	 			//ver(['estilos td', estilosTd])
+	 			cells.push({
+		 			index: c, 
+		 			tag: $(this).prop('tagName'),
+		 			clases: td.prop('class'),
+		 			estilos: estilosTd,
+		 			elements: elements
+		 		})
+	 		})
+
+	 		table.push({
+	 			index:index,
+	 			cells: cells
+	 		})
+
 	 	})
+
+	 	return table
 	 }
 
 	 function save(){
@@ -935,13 +1040,12 @@
 	 		var li = $(this),
 	 			idfila = li.prop('id').split('fila-')[1],
 	 			columnas = []
-	 		
+	 		li.find('.title').removeClass('editable selected')
 	 		li.find('.column').each(function(i){
 
 	 			var col = $(this).find('.col-content'),
 	 				idcol = $(this).find('.col-content').prop('id').split('col-')[1]
 	 				elements = []
-	 			addFlag(col) //agrega editable
 	 			col.children().each(function(e){
 	 				 //en caso de un div caja
 	 				var el = $(this), 
@@ -955,7 +1059,24 @@
 	 					clases = $(this).prop('class')
 	 				}
 
-	 				el.removeClass('editable selected')
+	 				
+	 					
+		 			
+		 			var	idelement = el.prop('id').split('element-')[1],
+		 				estilos = getCss(el)
+		 			el.removeClass('editable selected')
+		 			elements.push({
+		 				id: idelement,
+		 				numero: e + 1,	
+		 				clases: clases,	
+		 				estilos: estilos,
+		 				tag: el.prop('tagName'),	
+		 				content: getContent(el), 
+		 				table: getTableContent(el), 
+		 				url: getSrc(el),
+		 				link: el.data('type')
+		 			})
+
 		 			
 	 			})
 	 			ver(['content', getCss(col)])
@@ -967,7 +1088,7 @@
 	 					distribution: col.data('distribution'),
 	 					clases: col.prop('class'),	
 	 					estilos: getCss(col),
-	 					//elements: elements, 
+	 					elements: elements, 
 	 					content: base64Encode(col.html())
 	 				})
 
@@ -983,8 +1104,7 @@
 	 				clases: li.find('.fila-content').prop('class'),
 	 				estilos: getCss(li.find('.fila-content'))
 	 			}
-	 		li.find('.title').removeClass('editable selected')
-	 		//ver(['estilos fila', getCss(li.find('.fila-content'))])
+	 		ver(['estilos fila', getCss(li.find('.fila-content'))])
 	 		TEMA.filas.push(fila)
 	 	})
 
@@ -1003,8 +1123,8 @@
 	 			swal('GUARDAR','Error al Guardar:' + data.message,'error')
 	 		}
 	 	})
-	 	//console.clear()
-	 	//ver(['send', TEMA])
+	 	console.clear()
+	 	ver(['send', TEMA])
 	 }
 
 	 function setTema(){
