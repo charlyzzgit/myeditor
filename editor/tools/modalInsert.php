@@ -52,6 +52,9 @@
 			case 'mark':
  				elem = $('<' + tag + '>Nuevo Texto</' + tag + '>')
  			break
+ 			case 'p':
+ 				elem = $('<' + tag + '>Nuevo Texto Enriquecido</' + tag + '>')
+ 			break
  			case 'icon':
  				elem = $('<i class="icon-editor fas fa-user"></i>')
  			break
@@ -104,24 +107,43 @@
  			break
 
  			case 'audio':
- 			
- 				elem = $('<audio controls class="audio-small d-block">\
+					elem = $('<div class="media-box audio-small"><audio controls class="media d-block">\
 						Su Navegador no soporta Audio.\
-						</audio>')
- 				elem.mouseenter(function(){
- 					setMediaEditor($(this), 'Editar')
- 				})
+						</audio></div>')
+					
+		 				
+		 				setMediaEditor(elem)
+		 			
+		 			
+				break
+				case 'iframe':
+	 				elem = $('<div class="media-box video-small"><iframe frameborder="0" class="media video" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe></div>')
+	 				
+		 				
+		 				setMediaEditor(elem)
+		 			
+		 			
+	 			break
+
+ 			// case 'audio':
+ 			
+ 			// 	elem = $('<audio controls class="audio-small d-block">\
+				// 		Su Navegador no soporta Audio.\
+				// 		</audio>')
+ 			// 	elem.mouseenter(function(){
+ 			// 		setMediaEditor($(this), 'Editar')
+ 			// 	})
  				
 
  				
- 			break
+ 			// break
 
- 			case 'iframe':
- 				elem = $('<iframe frameborder="0" class="video video-small" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>')
- 				elem.mouseenter(function(){
- 					setMediaEditor($(this), 'Editar')
- 				})
- 			break
+ 			// case 'iframe':
+ 			// 	elem = $('<iframe frameborder="0" class="video video-small" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>')
+ 			// 	elem.mouseenter(function(){
+ 			// 		setMediaEditor($(this), 'Editar')
+ 			// 	})
+ 			// break
  		}
 
  		if(elem != null){
@@ -132,15 +154,20 @@
  				marginRight: '2px'
  			})
  		}
+
+ 		if(tag == 'audio' || tag == 'iframe'){
+ 			elem.find('.media').prop('id', 'element-0')
+ 		}else{
+ 			elem.prop('id', 'element-0')
+ 		}
  		elem
  			.addClass('editable')
- 			.prop('id', 'element-0')
  			.data('toggle','tooltip')
 			.prop('title', 'Click para Editar')
 			.tooltip()
  			.click(function(evt){
 		 		evt.stopPropagation()
-		 		OBJ = $(this)
+		 		OBJ = $(this).hasClass('media-box') ? $(this).find('.media') : $(this)
 		 		ver(['table', getTableContent(OBJ)])
 		 		setMenu(OBJ.prop('tagName').toLowerCase())
 		 		

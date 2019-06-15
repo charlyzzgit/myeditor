@@ -91,5 +91,5 @@ $(function(){
 		 
 	}
 	loading(null)
-	$('#editor').load('editor.php?editor=' + editor + '&device=' + dv + '&orientation=' + or)
+	$('#content-editor').load('editor.php?editor=' + editor + '&device=' + dv + '&orientation=' + or)
 })

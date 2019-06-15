@@ -15,32 +15,18 @@ function getColorChanels(rgba){
 	
 }
 
-function setMediaEditor(obj, name){
- 		OBJ = $(obj)
-
- 		var div = $('#media-editor')
- 		div.css({
- 			position: 'absolute', 
- 			top:OBJ.offset().top, 
- 			left:OBJ.offset().left, 
- 			width:OBJ.width(),
- 			height: OBJ.height(),
- 			zIndex:30, 
- 			background: 'rgba(0, 0, 0, .8)'
- 		})
- 		div.find('button').html(name)
-
- 		div.find('button')
- 			.unbind('click')
- 			.click(function(evt){
- 				evt.stopPropagation()
-		 		setMenu(OBJ.prop('tagName').toLowerCase())
-		 		$(this).parent().hide()
-				openEditor(true)
- 			})
- 		div.mouseleave(function(){
-	 			$(this).hide()
-	 		}).show()
+function setMediaEditor(obj){
+	if(EDITOR != 0){
+		obj.append('<div class="media-click"></div>')
+	}
+		
+	obj.find('.media-click').click(function(evt){
+		evt.stopPropagation()
+		OBJ = $(this).closest('.media-box').find('.media')
+		setMenu(OBJ.prop('tagName').toLowerCase())
+		$(this).parent()
+	openEditor(true)
+	})
  		
  	}
 
@@ -521,9 +507,13 @@ function addElements(elements, col, smart){
 					}else{
 						obj.html(el.content)
 					}
-					
-
 				break
+				case 'p':
+					obj = $('<' + tag + '></' + tag + '>')
+					obj.html(base64Decode(el.content))
+				break	
+
+				
 				case 'img':
 					obj = $('<img>')
 					obj.prop('src', el.url)
@@ -553,37 +543,41 @@ function addElements(elements, col, smart){
 				break
 
 				case 'audio':
-					obj = $('<audio controls class="audio-small d-block">\
+					obj = $('<div class="media-box"><audio controls class="media d-block">\
 						Su Navegador no soporta Audio.\
-						</audio>')
+						</audio></div>')
 					if(EDITOR != 0){
-		 				obj.mouseenter(function(){
-		 					setMediaEditor($(this), 'Editar')
-		 				})
+		 				
+		 				setMediaEditor(obj)
 		 			}
-		 			obj.prop('src', el.url)
+		 			obj.find('.media').prop('src', el.url)
 				break
 				case 'iframe':
-	 				obj = $('<iframe frameborder="0" class="video video-small" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>')
+	 				obj = $('<div class="media-box"><iframe frameborder="0" class="media video" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe></div>')
 	 				if(EDITOR != 0){
-		 				obj.mouseenter(function(){
-		 					setMediaEditor($(this), 'Editar')
-		 				})
+		 				
+		 				setMediaEditor(obj)
 		 			}
-		 			obj.prop('src', el.url)
+		 			obj.find('.media').prop('src', el.url)
 	 			break
 
 	 		}
 	 		if(EDITOR != 0){
 		 		obj
-		 			.prop('id', 'element-' + el.id)
 		 			.addClass('editable')
 		 			.data('toggle','tooltip')
 				    .prop('title', 'Click para Editar ' + obj.prop('tagName'))
 				    .tooltip()
 				}
 			obj.addClass(el.clases)
-	 		setCss(obj, el.estilos)
+			if(obj.hasClass('media-box')){
+				obj.find('.media').prop('id', 'element-' + el.id)
+	 			setCss(obj.find('.media'), el.estilos)
+			}else{
+				obj.prop('id', 'element-' + el.id)
+	 			setCss(obj, el.estilos)
+			}
+			
 	 		if(tag == 'table'){
 	 			var tb = obj
 	 			obj = $('<div class="col-12 scroll-table"></div>')

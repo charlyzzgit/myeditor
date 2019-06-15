@@ -68,7 +68,7 @@
 					{
 						box:'url',
 						type: 'text',
-						label: 'Url del Video:',
+						label: 'Url del Video: (Sólo videos de Youtube o Vimeo)',
 						value: url,
 						name: 'a-url',
 						callBack: function(value, data){

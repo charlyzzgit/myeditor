@@ -273,13 +273,14 @@
 			case 'p':
 				menu = [
 					{name: 'texto', value:'text'},
-					{name: 'texto enriquecido', value:'edittext'},
+					{name: 'multitexto', value:'textEditor'},
 					{name: 'fondo', value:'background'},
 					{name: 'borde', value:'border'},
 					{name: 'margen', value:'margin'},
 					{name: 'relleno', value:'padding'},
 					{name: 'sombra', value:'shadow'},
-					{name: 'Redondear', value:'radius'}
+					{name: 'insertar', value:'insert'},
+					{name: 'eliminar', value:'delete'},
 				]
 			break
 			case 'img':
@@ -750,7 +751,7 @@
 	 		tag = 'fila'
 	 	}else if(obj.hasClass('col-content')){
 	 		tag = 'column'
-	 	}else if(obj.hasClass('editable')){
+	 	}else if(obj.hasClass('editable') || obj.hasClass('media')){
 	 		tag = obj.prop('tagName').toLowerCase()
 	 	}
 	 	
@@ -901,7 +902,9 @@
 	 }
 
 	 function getContent(obj){
+
 	 	var tag = obj.prop('tagName').toLowerCase()
+	 	//alert(tag + ' = ' + obj.text())
 	 	switch(tag){
 	 		case 'table': 
 	 			return ''
@@ -930,8 +933,10 @@
 	 				}
 	 			})
 	 			return list
-	 		case 'audio':
+	 		case 'audio': case 'iframe':
 	 			return null;
+	 		case 'p': 
+	 			return base64Encode(obj.html());
 	 		default:
 	 			return obj.text()
 	 	}
@@ -983,14 +988,16 @@
 	 				estilosTd = getCss(td)
 	 			td.removeClass('editable selected')
 	 			$(this).children().each(function(e){
-	 				var el = $(this),
+	 				//$(this).removeClass('editable selected') //en caso de un div caja
+	 				var clases = $(this).prop('class'),
+	 					el = $(this).hasClass('media-box') ? $(this).find('.media') : $(this),
 	 					idelement = el.prop('id').split('element-')[1],
 	 					estilos = getCss(el)
 	 				el.removeClass('editable selected')
 	 				elements.push({
 	 					id: idelement,
 	 					numero: e + 1,	
-	 					clases: el.prop('class'),	
+	 					clases: clases,	
 	 					estilos: estilos,
 	 					tag: el.prop('tagName'),	
 	 					content: base64Encode(getContent(el)),
@@ -1034,14 +1041,25 @@
 	 			columnas = []
 	 		li.find('.title').removeClass('editable selected')
 	 		li.find('.column').each(function(i){
+
 	 			var col = $(this).find('.col-content'),
 	 				idcol = $(this).find('.col-content').prop('id').split('col-')[1]
 	 				elements = []
 	 			col.children().each(function(e){
-	 				var el = $(this)
+	 				 //en caso de un div caja
+	 				var el = $(this), 
+	 					clases = $(this).prop('class')
 	 				if($(this).hasClass('scroll-table')){
 	 					el = $(this).find('table')
 	 				}
+	 				if($(this).hasClass('media-box')){
+	 					$(this).removeClass('editable selected')
+	 					el = $(this).find('.media')
+	 					clases = $(this).prop('class')
+	 				}
+
+	 				
+	 					
 		 			
 		 			var	idelement = el.prop('id').split('element-')[1],
 		 				estilos = getCss(el)
@@ -1049,7 +1067,7 @@
 		 			elements.push({
 		 				id: idelement,
 		 				numero: e + 1,	
-		 				clases: el.prop('class'),	
+		 				clases: clases,	
 		 				estilos: estilos,
 		 				tag: el.prop('tagName'),	
 		 				content: getContent(el), 

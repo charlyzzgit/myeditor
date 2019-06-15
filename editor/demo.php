@@ -45,7 +45,7 @@
       <div id="loading" class="flex-row-center-center"><img></div>
       <header class="bg-info"></header>
       <nav class="bg-secondary"></nav>
-      <section id="editor" class="content">
+      <section id="content-editor" class="content">
         
       </section>
       <footer class="bg-dark"></footer>
