@@ -596,7 +596,7 @@ function getList(list){
 	if(list == null){
 		for(var i = 1; i <= 3; i++){
  			var li = $('<li class="flex-row-start-center"></li>')
- 			li.append('<i class="fa fa-circle"></i>')
+ 			li.append('<i class="fas fa-circle"></i>')
  			li.append('<span class="ml-2"></span>')
  			li.find('span').text('Item ' + i)
  			ul.append(li)
@@ -776,24 +776,121 @@ function setCss(obj, styles){
 }
 
 function resetCss(obj){
-	obj.css({
-		background: 'none',
-	 	border: 'none',
-	 	padding: 0,
-	 	margin: '2px',
-	 	boxShadow: 'none',
-	 	borderRadius: 0,
-	 	fontFamily: 'arial',
-		fontSize: '16px',
-		letterSpacing:0,
-		lineHeight:'1.2px',
-		fontWeight: '500px',
-		textFillColor: 'rgba(0, 0, 0, 1)',
-		textShadow: 'rgba(0, 0, 0, 1)',
-		textStrokeColor: 'rgba(0, 0, 0, 1)',
-		textStrokeWidth: 0,
-		fontStyle: 'normal',
-		textTransform: 'none',
-		textDecoration: 'none'
-	}).prop('class', null)
+	var tag = obj.prop('tagName').toLowerCase()
+	
+
+	if(obj.hasClass('tema')){
+		obj.css({
+			background: 'none',
+		 	padding: 0
+		}).prop('class', null)
+		obj.addClass('tema col-12 flex-col-start-start')
+	}else if(obj.hasClass('fila-content')){
+		obj.css({
+			background: 'none',
+		 	border: 'none',
+		 	padding: 0,
+		 	boxShadow: 'none',
+		 	borderRadius: 0
+		}).prop('class', null)
+		obj.addClass('fila-content col-12 flex-col-start-start')		
+	}else if(obj.hasClass('titulo-fila')){
+		obj.css({
+			background: 'none',
+		 	border: 'none',
+		 	padding: 0,
+		 	margin: '2px',
+		 	boxShadow: 'none',
+		 	borderRadius: 0,
+		 	fontFamily: 'arial',
+			fontSize: '16px',
+			letterSpacing:0,
+			lineHeight:'1.2px',
+			fontWeight: '500px',
+			textFillColor: 'rgba(0, 0, 0, 1)',
+			textShadow: 'rgba(0, 0, 0, 1)',
+			textStrokeColor: 'rgba(0, 0, 0, 1)',
+			textStrokeWidth: 0,
+			fontStyle: 'normal',
+			textTransform: 'none',
+			textDecoration: 'none'
+		}).prop('class', null)
+		obj.addClass('title titulo-fila editable')		
+	}else if(obj.hasClass('col-content')){
+		obj.css({
+			background: 'none',
+		 	border: 'none',
+		 	padding: 0
+		}).prop('class', null)
+		obj.addClass('col-content column-hover col-12 flex-row-start-start flex-wrap')		
+	}else{
+		obj.css({
+			background: 'none',
+		 	border: 'none',
+		 	padding: 0,
+		 	margin: '2px',
+		 	boxShadow: 'none',
+		 	borderRadius: 0,
+		 	fontFamily: 'arial',
+			fontSize: '16px',
+			letterSpacing:0,
+			lineHeight:'1.2px',
+			fontWeight: '500px',
+			textFillColor: 'rgba(0, 0, 0, 1)',
+			textShadow: 'rgba(0, 0, 0, 1)',
+			textStrokeColor: 'rgba(0, 0, 0, 1)',
+			textStrokeWidth: 0,
+			fontStyle: 'normal',
+			textTransform: 'none',
+			textDecoration: 'none'
+		}).prop('class', null)
+		obj.addClass('editable')
+	}
+
+	if(tag == 'audio'){
+		obj.addClass('audio-small')
+	}
+
+	if(tag == 'iframe'){
+		obj.addClass('video-small')
+	}
+
+	if(tag == 'ul'){
+		
+		obj.find('i, span').css({
+			background: 'none',
+		 	border: 'none',
+		 	padding: 0,
+		 	margin: 0,
+		 	boxShadow: 'none',
+		 	borderRadius: 0,
+		 	fontFamily: 'arial',
+			fontSize: '16px',
+			letterSpacing:0,
+			lineHeight:'1.2',
+			fontWeight: '500px',
+			textFillColor: 'rgba(0, 0, 0, 1)',
+			textShadow: 'rgba(0, 0, 0, 1)',
+			textStrokeColor: 'rgba(0, 0, 0, 1)',
+			textStrokeWidth: 0,
+			fontStyle: 'normal',
+			textTransform: 'none',
+			textDecoration: 'none'
+		}).prop('class', null)
+		obj.find('i').addClass('icon-editor fas fa-circle')
+		obj.find('span').addClass('ml-2')
+	}
+
+	if(tag == 'img'){
+		obj.addClass('img-small')
+	}
+
+	if(tag == 'p'){
+		obj.addClass('multi-text')
+	}
+
+
+	
+
+	
 }

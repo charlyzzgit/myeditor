@@ -131,11 +131,11 @@
 		<h1 id="titulo-tema" class="editable">Titulo Tema</h1>
 		
 		<div id="tool-tema" class="flex-row-start-center">
-			<i class="ver-demo fa fa-desktop text-dark hand mr-2 big-icon"></i>
-			<i class="tema-edit fa fa-pen-square text-success hand mr-2 big-icon"></i>
-			<i class="add-fila fa fa-plus-square text-primary hand mr-2 big-icon"></i>
-			<i class="save fa fa-save text-warning hand mr-2 big-icon"></i>
-			
+			<button class="ver-demo btn btn-dark btn-sm mr-2"><i class="fa fa-desktop"></i></button>
+			<button class="tema-edit btn btn-success btn-sm mr-2"><i class="fa fa-pen"></i></button>
+			<button class="add-fila btn btn-primary btn-sm mr-2"><i class="fa fa-plus"></i></button>
+			<button class="save btn btn-info btn-sm mr-2"><i class="fa fa-save"></i></button>
+			<button class="restore btn btn-warning btn-sm mr-2"><i class="fas fa-undo-alt"></i></button>
 		</div>
 	
 	</div>
@@ -153,7 +153,7 @@
 		orientation = '<?php print($orientation); ?>',
 		TEMA = getJson('<?php print(toJson($tema)); ?>'),
 
-		modalInsert, modalTextos, modalDelete, modalDevice, modalIcons,
+		modalInsert, modalTextos, modalDelete, modalDevice, modalIcons, modalReset,
 		menu = [
 			{name: 'texto', value:'text'},
 			{name: 'fondo', value:'background'},
@@ -191,6 +191,14 @@
       	})
 	}
 
+	if(modalReset == null){
+		modalReset = new Modal({
+        	title: 'Restablecer',
+        	size: 'small',
+        	bg: 'bg-warning'
+      	})
+	}
+
 	ver(['tema', TEMA])	
 	function setMenu(tag){
 		
@@ -200,6 +208,7 @@
 				menu = [
 					{name: 'fondo', value:'background'},
 					{name: 'relleno', value:'padding'}
+					
 					]
 			break
 			case 'fila':
@@ -254,6 +263,7 @@
 					{name: 'Redondear', value:'radius'},
 					//{name: 'flotación', value:'float'},
 					{name: 'insertar', value:'insert'},
+					{name: 'restablecer', value:'reset'},
 					{name: 'eliminar', value:'delete'},
 					
 				]
@@ -265,13 +275,15 @@
 						{name: 'margen', value:'margin'},
 						{name: 'sombra', value:'shadow'},
 						{name: 'insertar', value:'insert'},
+						{name: 'restablecer', value:'reset'},
 						{name: 'eliminar', value:'delete'},
 						
 					]
 				}
 				if(OBJ.hasClass('th')){
 					menu = [
-						{name: 'texto', value:'text'}
+						{name: 'texto', value:'text'}, 
+						{name: 'restablecer', value:'reset'}
 
 					]
 				}
@@ -287,6 +299,7 @@
 						{name: 'relleno', value:'padding'},
 						{name: 'sombra', value:'shadow'},
 						{name: 'insertar', value:'insert'},
+						{name: 'restablecer', value:'reset'},
 						{name: 'eliminar', value:'delete'}
 						
 					]
@@ -304,6 +317,7 @@
 					{name: 'Redondear', value:'radius'},
 					//{name: 'flotación', value:'float'},
 					{name: 'insertar', value:'insert'},
+					{name: 'restablecer', value:'reset'},
 					{name: 'eliminar', value:'delete'}
 					]
 			break
@@ -319,6 +333,7 @@
 					{name: 'Redondear', value:'radius'},
 					//{name: 'flotación', value:'float'},
 					{name: 'insertar', value:'insert'},
+					{name: 'restablecer', value:'reset'},
 					{name: 'eliminar', value:'delete'}
 					
 				]
@@ -332,7 +347,7 @@
 					{name: 'predefinido', value:'table_style'},
 					{name: 'borde', value:'border'},
 					{name: 'margen', value:'margin'},
-					//{name: 'flotación', value:'float'},
+					{name: 'restablecer', value:'reset'},
 					{name: 'eliminar', value:'delete'},
 					
 	
@@ -348,7 +363,8 @@
 				menu = [
 					{name: 'alineacion', value:'align'},
 					{name: 'Ancho', value:'size'},
-					{name: 'fondo', value:'background'}
+					{name: 'fondo', value:'background'}, 
+					{name: 'restablecer', value:'reset'}
 					
 	
 				]
@@ -357,7 +373,8 @@
 				menu = [
 					{name: 'alineacion', value:'align'},
 					{name: 'fondo', value:'background'},
-					{name: 'insertar', value:'insert'}
+					{name: 'insertar', value:'insert'}, 
+					{name: 'restablecer', value:'reset'}
 	
 				]
 			break
@@ -374,6 +391,7 @@
 					{name: 'sombra', value:'shadow'},
 					//{name: 'flotación', value:'float'},
 					{name: 'insertar', value:'insert'},
+					{name: 'restablecer', value:'reset'},
 					{name: 'eliminar', value:'delete'},
 					
 				]
@@ -388,6 +406,7 @@
 					{name: 'sombra', value:'shadow'},
 					{name: 'Redondear', value:'radius'},
 					{name: 'insertar', value:'insert'},
+					{name: 'restablecer', value:'reset'},
 					{name: 'eliminar', value:'delete'}
 				]
 			break
@@ -400,6 +419,7 @@
 					{name: 'sombra', value:'shadow'},
 					{name: 'Redondear', value:'radius'},
 					{name: 'insertar', value:'insert'},
+					{name: 'restablecer', value:'reset'},
 					{name: 'eliminar', value:'delete'}
 				]
 			break
@@ -411,24 +431,24 @@
 		var size = menu.length
 	 	$.each(menu, function(i, l){
 	 		var li = $('<li class="menu-item"><b></b></li>'),
-	 			sel = (l.value != 'delete' && l.value != 'empty') ? 'bg-info' : 'bg-danger',
-	 			over = (l.value != 'delete' && l.value != 'empty') ? 'bg-dark' : 'bg-danger'
+	 			sel = (l.value != 'delete' && l.value != 'empty' && l.value != 'reset') ? 'bg-info' : (l.value == 'reset') ? 'bg-warning' : 'bg-danger',
+	 			over = (l.value != 'delete' && l.value != 'empty' && l.value != 'reset') ? 'bg-dark' : (l.value == 'reset') ? 'bg-warning' : 'bg-danger'
 	 		li.css('width', (100/size) + '%')
 	 		li.find('b').html(l.name.toUpperCase())
 	 		li.addClass('flex-row-center-center bg-secondary text-white')
 	 		li.data('type', l.value)
 	 		li.mouseover(function(){
-	 			$(this).removeClass('bg-secondary bg-dark bg-info bg-danger').addClass(over)
+	 			$(this).removeClass('bg-secondary bg-dark bg-info bg-danger bg-warning').addClass(over)
 	 		}).mouseout(function(){
 	 			var active = parseInt($(this).data('active')),
 	 				bg = (active == 1) ? sel : 'bg-secondary'
-	 			$(this).removeClass('bg-secondary bg-dark bg-info bg-danger').addClass(bg)
+	 			$(this).removeClass('bg-secondary bg-dark bg-info bg-danger bg-warning').addClass(bg)
 	 		}).click(function(){
 
-	 			$('.menu-item').removeClass('bg-secondary bg-dark bg-info bg-danger').addClass('bg-secondary').data('active', 0)
+	 			$('.menu-item').removeClass('bg-secondary bg-dark bg-info bg-danger bg-warning').addClass('bg-secondary').data('active', 0)
 	 			$(this).removeClass('bg-secondary bg-dark bg-info bg-danger').addClass(sel).data('active', 1)
 	 			var tool = $(this).data('type')
-	 			if(tool != 'delete'){
+	 			if(tool != 'delete' && tool != 'reset'){
 	 				var e = ''
 	 				if(OBJ.prop('tagName') == 'UL'){
 	 					if(tool == 'ul-text'){
@@ -442,9 +462,13 @@
 	 				}
 	 				$('#tools').load('tools/' + tool + '.php?elem=' + e)
 	 			}else{
-	 				var id = OBJ.prop('id')
-	 					
-	 				 modalDelete.openModal('modalDelete.php?id=' + id + '&del=element')
+	 				if(tool == 'delete'){
+		 				var id = OBJ.prop('id')
+		 					
+		 				 modalDelete.openModal('modalDelete.php?id=' + id + '&del=element')
+		 			}else{
+		 				modalReset.openModal('tools/modalReset.php')
+		 			}
 	 			}
 	 		})
 	 		$('#menu-bar').append(li)
@@ -502,6 +526,14 @@
 			           .click(function(){
 			           		save()
 			           })
+
+		$('.restore').data('toggle','tooltip')
+			           .prop('title', 'Restablecer Tema')
+			           .tooltip()
+			           .click(function(){
+			           		OBJ = $('#tema')
+			           		modalReset.openModal('tools/modalReset.php')
+			           })
  		
 
  		$('.column-toolbar').hide()
@@ -546,6 +578,7 @@
 				 			<h6 class="m-0 title-col"></h6>\
 				 			<div class="flex-row-start-center">\
 				 				<i class="edit-col fa fa-pen text-success hand"></i>\
+				 				<i class="reset-col fa fa-undo-alt text-warning hand ml-2"></i>\
 				 				<i class="del-col fa fa-trash text-danger hand ml-2"></i>\
 				 			</div>\
 				 		</div>\
@@ -571,6 +604,16 @@
 			           		setMenu('column')
 			           		openEditor(true)
 			           })
+
+		col.find('.reset-col')
+	 				   .data('toggle','tooltip')
+			           .prop('title', 'Restablecer Columna')
+			           .tooltip()
+			           .click(function(){
+			           		OBJ = $(this).closest('.column').find('.col-content')
+			           		modalReset.openModal('tools/modalReset.php')
+			           })
+			
 		col.find('.del-col')
 	 				   .data('toggle','tooltip')
 			           .prop('title', 'Vaciar Columna')
@@ -687,13 +730,14 @@
 	 					<div class="fila-toolbar col-12 flex-row-between-center bg-light elevation-1 p-1 pl-2 pr-2">\
 				 			<h6 class="m-0 title-fila"></h6>\
 				 			<div class="flex-row-start-center">\
-				 				<i class="fila-edit fa fa-pen-square text-success hand mr-2 big-icon"></i>\
-				 				<i class="fila-del fa fa-window-close text-danger hand mr-2 big-icon"></i>\
+				 				<button class="fila-edit btn btn-success btn-sm mr-2"><i class="fa fa-pen"></i>\
+				 				<button class="fila-reset btn btn-warning btn-sm mr-2"><i class="fas fa-undo-alt"></i>\
+				 				<button class="fila-del btn btn-danger btn-sm mr-2"><i class="fa fa-times"></i>\
 				 			</div>\
 				 		</div>\
 				 		<div class="fila-content col-12 flex-col-start-start">\
 		 					<div class="col-12 flex-row-between-center">\
-					 			<h3 class="title">Título Fila</h3>\
+					 			<h3 class="title titulo-fila">Título Fila</h3>\
 					 		</div>\
 					 		<ul class="columnas col-12 flex-row-start-start flex-wrap m-0"></ul>\
 					 	</div>\
@@ -728,6 +772,18 @@
 			           		setMenu('fila')
 			           		openEditor(true)
 			           })
+
+		row.find('.fila-reset')
+					  
+					   .data('toggle','tooltip')
+			           .prop('title', 'Restablecer Fila')
+			           .tooltip()
+			           .click(function(){
+			           		OBJ = $(this).closest('.fila').find('.fila-content')
+			           		modalReset.openModal('tools/modalReset.php')
+			           })
+
+		
 
 		row.find('.fila-del')
 					   .data('id', id)
@@ -920,7 +976,7 @@
 	 function addFlag(box){
 	 	box.children().each(function(){
 	 		if($(this).hasClass('editable')){
-	 			$(this).addClass('eddittable')
+	 			//$(this).addClass('eddittable')
 	 		}
 	 		addFlag($(this))
 	 	})
