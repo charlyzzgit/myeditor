@@ -774,3 +774,26 @@ function setCss(obj, styles){
 		console.log('setcss error:', e)
 	}
 }
+
+function resetCss(obj){
+	obj.css({
+		background: 'none',
+	 	border: 'none',
+	 	padding: 0,
+	 	margin: '2px',
+	 	boxShadow: 'none',
+	 	borderRadius: 0,
+	 	fontFamily: 'arial',
+		fontSize: '16px',
+		letterSpacing:0,
+		lineHeight:'1.2px',
+		fontWeight: '500px',
+		textFillColor: 'rgba(0, 0, 0, 1)',
+		textShadow: 'rgba(0, 0, 0, 1)',
+		textStrokeColor: 'rgba(0, 0, 0, 1)',
+		textStrokeWidth: 0,
+		fontStyle: 'normal',
+		textTransform: 'none',
+		textDecoration: 'none'
+	}).prop('class', null)
+}

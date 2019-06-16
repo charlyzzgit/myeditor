@@ -62,6 +62,9 @@ switch($action){
 		
 	
 	break;
+	case 'saveImage':
+		echo 'uploaded';
+	break;
 	case 'ver':
 		$str = 'Hola!!
 

@@ -526,6 +526,7 @@
 
 	 function setEditables(){
 	 	$('.editable').click(function(evt){
+	 		evt.preventDefault()
 	 		evt.stopPropagation()
 	 		OBJ = $(this)
 	 		var tag = OBJ.prop('tagName').toLowerCase()
@@ -660,6 +661,8 @@
 
 		
 		col.find('.col-content').html(base64Decode(column.content))
+		
+		
 		if(EDITOR != 0){
 			setElements(col.find('.col-content'))
 		}
