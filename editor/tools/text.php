@@ -404,7 +404,11 @@
 		btn.click(function(){
 			modalIcons.openModal('tools/modalIcons.php')
 		})
+		$('#font-family').hide()
 		$('#font-text').empty().addClass('pt-5').append(btn)
+	}
+	if(OBJ.hasClass('icon-editor')){
+		$('#font-family').hide()
 	}
 	ver(['elem:', elem])
 </script>

@@ -8,7 +8,7 @@
 		background: #f2f2f2
 	}
 </style>
-<div id="form-tool" class="col-12 flex-row-start-start">
+<div id="form-tool" class="col-12 flex-row-center-start">
 	<div class="sector flex-row-center-start flex-wrap border p-2">
 		<div class="side col-12 flex-row-center-center mb-2">Uniforme</div>
 		<div id="border-color" class="col-12"></div>
@@ -204,4 +204,6 @@
 			inputs: inputs,
 			minimize:true
 	})
+
+	
 </script>

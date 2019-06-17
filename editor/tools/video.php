@@ -18,7 +18,7 @@
 	'use strict'
 	var demo = $('#video'), 
 		size = 'small', 
-		url = OBJ.prop('src')
+		url = exists(OBJ.prop('src'), 'myeditor/editor/') ? '' : OBJ.prop('src')
 
 	function setVideo(url){
 		var src = ''

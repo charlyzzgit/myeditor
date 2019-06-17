@@ -98,6 +98,7 @@
 			li.find('b').html(btn.name)
 			li.find('div').data('tag', btn.tag).click(function(){
 				var mtag = $(this).data('tag')
+			
 				if(mtag == 'span'){
 					//alert('a')
 					modalTextos.openModal('tools/modalTextos.php?box=col')

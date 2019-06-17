@@ -77,6 +77,29 @@
 		box-shadow: 0 -2px 10px 2px rgba(0, 0, 0, .2)
 	}
 
+	#modal-class{
+		position: fixed;
+		top:-500px;
+		left: 0;
+		z-index: 50;
+		box-shadow: 0 2px 10px 2px rgba(0, 0, 0, .2)
+	}
+
+	#modal-class .inner{
+		height: 300px;
+		overflow-y: auto;
+		background: #f2f2f2
+	}
+
+	#class-preview{
+		
+		padding: 20px;
+		font-family: arial;
+		font-size: 16px;
+		color: rgba(0, 0, 0, 1);
+		background: rgba(255, 255, 255, 1)
+	}
+
 	#tools{
 		height: 300px
 	}
@@ -105,10 +128,26 @@
 		<?php } ?>
 	}
 
-	
+	#modal-save-class{
+		position: fixed;
+		right: 10px;
+		bottom:50px;
+		z-index:2000;
+		border-radius: 2px
+	}
 
 
 </style>
+<div id="modal-class" class="col-12 flex-col-start-center">
+	<div class="col-12 text-center bg-pimary text-white p-2">Vista Previa de Clase</div>
+	<div class="inner col-12 flex-row-center-center">
+		<div id="class-preview" class="flex-row-center-center">Vista Previa</div>
+	</div>
+</div>
+<div id="modal-save-class" class="flex-col-start-center p-1 bg-white elevation-2">
+	<button class="save btn btn-info btn-sm"><i class="fa fa-save"></i></button>
+	<button class="add-css btn btn-secondary btn-sm mt-2"><i class="fa-css3-alt fab"></i></button>
+</div>
 <div id="media-editor" class="flex-row-center-center"><button class="btn btn-warning"></button></div>
 <div id="modal-edit" class="col-12 flex-col-start-start bg-white">
 	<div class="header bg-primary col-12 flex-row-between-center text-white p-1">
@@ -136,6 +175,7 @@
 			<button class="add-fila btn btn-primary btn-sm mr-2"><i class="fa fa-plus"></i></button>
 			<button class="save btn btn-info btn-sm mr-2"><i class="fa fa-save"></i></button>
 			<button class="restore btn btn-warning btn-sm mr-2"><i class="fas fa-undo-alt"></i></button>
+			<button class="add-css btn btn-secondary btn-sm mr-2"><i class="fa-css3-alt fab"></i></button>
 		</div>
 	
 	</div>
@@ -153,7 +193,7 @@
 		orientation = '<?php print($orientation); ?>',
 		TEMA = getJson('<?php print(toJson($tema)); ?>'),
 
-		modalInsert, modalTextos, modalDelete, modalDevice, modalIcons, modalReset,
+		modalInsert, modalTextos, modalDelete, modalDevice, modalIcons, modalReset, modalClass,
 		menu = [
 			{name: 'texto', value:'text'},
 			{name: 'fondo', value:'background'},
@@ -196,6 +236,14 @@
         	title: 'Restablecer',
         	size: 'small',
         	bg: 'bg-warning'
+      	})
+	}
+
+	if(modalClass == null){
+		modalClass = new Modal({
+        	title: 'Estilos Personalizados',
+        	size: 'medium',
+        	bg: 'bg-secondary'
       	})
 	}
 
@@ -424,6 +472,20 @@
 				]
 			break
 
+			case 'hr':
+				menu = [
+					{name: 'fondo', value:'background'},
+					{name: 'Dimensiones', value:'size'},
+					{name: 'margen', value:'margin'},
+					{name: 'sombra', value:'shadow'},
+					
+					{name: 'insertar', value:'insert'},
+					{name: 'restablecer', value:'reset'},
+					{name: 'eliminar', value:'delete'},
+					
+				]
+			break
+
 
 
 		}
@@ -535,7 +597,13 @@
 			           		modalReset.openModal('tools/modalReset.php')
 			           })
  		
-
+	    $('.add-css').data('toggle','tooltip')
+			           .prop('title', 'Estilos Personalizadas')
+			           .tooltip()
+			           .click(function(){
+			           		OBJ = $('#class-preview')
+			           		modalClass.openModal('tools/modalClass.php')
+			           })
  		$('.column-toolbar').hide()
  		
 			           		
@@ -554,6 +622,13 @@
 	 	
 	 	$('#tema').css('min-height', '150vh')
 
+	 	$(window).scroll(function(){
+	 		if($(window).scrollTop() > 100){
+	 			$('#modal-save-class').show()
+	 		}else{
+	 			$('#modal-save-class').hide()
+	 		}
+	 	})
 	 }
 
 	 function setEditables(){
@@ -1117,12 +1192,15 @@
 			case 'ul': return 'Lista';
 			case 'audio': return 'Audio';
 			case 'video': case 'iframe': return 'Video';
+			case 'hr': return 'Linea';
 			case 'root':return 'Tema';
 			case 'fila': return 'Fila';
 			case 'column': return 'Columna'
 			
 	 	}
 	 }
+
+	 $('#modal-save-class').hide()
 
 	 if(EDITOR != 0){
 	 	config()

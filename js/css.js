@@ -783,7 +783,7 @@ function resetCss(obj){
 		obj.css({
 			background: 'none',
 		 	padding: 0
-		}).prop('class', null)
+		}).prop('class', '')
 		obj.addClass('tema col-12 flex-col-start-start')
 	}else if(obj.hasClass('fila-content')){
 		obj.css({
@@ -792,7 +792,7 @@ function resetCss(obj){
 		 	padding: 0,
 		 	boxShadow: 'none',
 		 	borderRadius: 0
-		}).prop('class', null)
+		}).prop('class', '')
 		obj.addClass('fila-content col-12 flex-col-start-start')		
 	}else if(obj.hasClass('titulo-fila')){
 		obj.css({
@@ -814,15 +814,55 @@ function resetCss(obj){
 			fontStyle: 'normal',
 			textTransform: 'none',
 			textDecoration: 'none'
-		}).prop('class', null)
+		}).prop('class', '')
 		obj.addClass('title titulo-fila editable')		
 	}else if(obj.hasClass('col-content')){
 		obj.css({
 			background: 'none',
 		 	border: 'none',
 		 	padding: 0
-		}).prop('class', null)
+		}).prop('class', '')
 		obj.addClass('col-content column-hover col-12 flex-row-start-start flex-wrap')		
+	}else if(obj.hasClass('icon-editor')){
+		obj.css({
+			background: 'none',
+		 	border: 'none',
+		 	padding: 0,
+		 	margin: '2px',
+		 	boxShadow: 'none',
+		 	borderRadius: 0,
+			fontSize: '16px',
+			letterSpacing:0,
+			lineHeight:'1.2px',
+			fontWeight: '500px',
+			textFillColor: 'rgba(0, 0, 0, 1)',
+			textShadow: 'rgba(0, 0, 0, 1)',
+			textStrokeColor: 'rgba(0, 0, 0, 1)',
+			textStrokeWidth: 0,
+			fontStyle: 'normal',
+			textTransform: 'none',
+			textDecoration: 'none'
+		}).prop('class', '')
+		obj.addClass('icon-editor fas fa-circle editable')
+	}else if(obj.hasClass('media')){
+		obj.css({
+		 	border: 'none',
+		 	padding: 0,
+		 	margin: '2px',
+		 	boxShadow: 'none',
+		 	borderRadius: 0
+		}).prop('class', '')
+		if(tag == 'audio'){
+			obj.addClass('media')
+			obj.prop('src', '')
+			obj.closest('.media-box').prop('class', '').addClass('media-box audio-small editable')
+		}
+
+		if(tag == 'iframe'){
+			obj.addClass('media video')
+			obj.prop('src', '')
+			obj.closest('.media-box').prop('class', '').addClass('media-box video-small editable')
+		}
 	}else{
 		obj.css({
 			background: 'none',
@@ -843,17 +883,11 @@ function resetCss(obj){
 			fontStyle: 'normal',
 			textTransform: 'none',
 			textDecoration: 'none'
-		}).prop('class', null)
+		}).prop('class', '')
 		obj.addClass('editable')
 	}
 
-	if(tag == 'audio'){
-		obj.addClass('audio-small')
-	}
-
-	if(tag == 'iframe'){
-		obj.addClass('video-small')
-	}
+	
 
 	if(tag == 'ul'){
 		
@@ -864,7 +898,6 @@ function resetCss(obj){
 		 	margin: 0,
 		 	boxShadow: 'none',
 		 	borderRadius: 0,
-		 	fontFamily: 'arial',
 			fontSize: '16px',
 			letterSpacing:0,
 			lineHeight:'1.2',
@@ -876,13 +909,14 @@ function resetCss(obj){
 			fontStyle: 'normal',
 			textTransform: 'none',
 			textDecoration: 'none'
-		}).prop('class', null)
+		}).prop('class', '')
 		obj.find('i').addClass('icon-editor fas fa-circle')
-		obj.find('span').addClass('ml-2')
+		obj.find('span').addClass('ml-2').css({fontFamily: 'arial'})
 	}
 
 	if(tag == 'img'){
 		obj.addClass('img-small')
+		obj.prop('src', IMG + 'noimage.png')
 	}
 
 	if(tag == 'p'){

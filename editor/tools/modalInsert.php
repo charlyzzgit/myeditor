@@ -57,7 +57,7 @@
  				elem.addClass('multi-text')
  			break
  			case 'icon':
- 				elem = $('<i class="icon-editor fas fa-user"></i>')
+ 				elem = $('<i class="icon-editor fas fa-circle"></i>')
  			break
  			case 'img':
  				elem = $('<img>')
@@ -116,35 +116,19 @@
 		 				setMediaEditor(elem)
 		 			
 		 			
-				break
-				case 'iframe':
+			break
+			case 'iframe':
 	 				elem = $('<div class="media-box video-small"><iframe frameborder="0" class="media video" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe></div>')
 	 				
 		 				
 		 				setMediaEditor(elem)
 		 			
 		 			
-	 			break
+	 		break
 
- 			// case 'audio':
- 			
- 			// 	elem = $('<audio controls class="audio-small d-block">\
-				// 		Su Navegador no soporta Audio.\
-				// 		</audio>')
- 			// 	elem.mouseenter(function(){
- 			// 		setMediaEditor($(this), 'Editar')
- 			// 	})
- 				
-
- 				
- 			// break
-
- 			// case 'iframe':
- 			// 	elem = $('<iframe frameborder="0" class="video video-small" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>')
- 			// 	elem.mouseenter(function(){
- 			// 		setMediaEditor($(this), 'Editar')
- 			// 	})
- 			// break
+ 			case 'hr':
+	 				elem = $('<hr>') 
+ 			break
  		}
 
  		if(elem != null){
@@ -169,7 +153,7 @@
  			.click(function(evt){
 		 		evt.stopPropagation()
 		 		OBJ = $(this).hasClass('media-box') ? $(this).find('.media') : $(this)
-		 		ver(['table', getTableContent(OBJ)])
+		 		
 		 		setMenu(OBJ.prop('tagName').toLowerCase())
 		 		
 				openEditor(true)

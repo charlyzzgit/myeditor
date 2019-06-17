@@ -61,6 +61,7 @@
  					OBJ.removeClass(ico)
  				})
  				OBJ.addClass(ICONS[n])
+ 				ver(['icono:', ICONS[n], OBJ.prop('class')])
  				$('#close-icons').trigger('click')
  			})
  			$('#icons').append(li)
