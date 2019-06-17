@@ -15,6 +15,7 @@ function backup(){
 	setBackup('filas');
 	setBackup('columnas');
 	setBackup('elements');
+	setBackup('estilos');
 }
 
 function restore(){
@@ -22,6 +23,7 @@ function restore(){
 	getBackup('filas');
 	getBackup('columnas');
 	getBackup('elements');
+	getBackup('estilos');
 }
 
 function createTema(){
@@ -386,9 +388,157 @@ function saveArchivo($request, $files){
 }
 
 
+function saveEstilo($request){
+	$sql = new consulta();
+	$id = getPost($request, 'idestilo', 0);
+	$sql->addCampo('estilos', getPost($request, 'estilos', 0));
+	$sql->addCampo('important', getPost($request, 'important', 0));
+
+	if($id == 0){
+		$sql->addCampo('id_docente', getPost($request, 'iddocente', 0));
+		$sql->addCampo('name', getPost($request, 'name', 0));
+		$sql->insert('estilos');
+	}else{
+		$sql->addCondicion('id', $id);
+		$sql->update('estilos');
+	}
+
+	if($sql->getSuccess()){
+		return toJson(array('result' => SUCCESS));
+	}else{
+		return toJson(array('result' => 'ERROR', 'message' => $sql->getError()));
+	}
+}
+
+function deleteEstilo($request){
+	$id = getPost($request, 'idestilo', 0);
+	$sql = new consulta();
+	$sql->addCondicion('id', $id);
+	$sql->delete('estilos');
+	if($sql->getSuccess()){
+		return toJson(array('result' => SUCCESS));
+	}else{
+		return toJson(array('result' => 'ERROR', 'message' => $sql->getError()));
+	}
+}
+
+function getEstilos($iddocente){
+	$sql = new consulta();
+	$sql->addCondicion('id_docente', $iddocente);
+	$sql->orderBy('name asc');
+	$res = $sql->readSql('estilos');
+	$estilos = array();
+	while($reg = getreg($res)){
+		$reg->estilos = getCss($reg->estilos);
+		$estilos[] = $reg;
+	}
+	return $estilos;
+}
 
 
+function toCss($name){
+	$alfa = array(
+		'A',
+		'B',
+		'C',
+		'D',
+		'E',
+		'F',
+		'G',
+		'H',
+		'I',
+		'J',
+		'K',
+		'L',
+		'M',
+		'N',
+		'O',
+		'P',
+		'Q',
+		'R',
+		'S',
+		'T',
+		'U',
+		'V',
+		'W',
+		'X',
+		'Y',
+		'Z'
+	);
 
+	$result = array(
+		'-a',
+		'-b',
+		'-c',
+		'-d',
+		'-e',
+		'-f',
+		'-g',
+		'-h',
+		'-i',
+		'-j',
+		'-k',
+		'-l',
+		'-m',
+		'-n',
+		'-o',
+		'-p',
+		'-q',
+		'-r',
+		'-s',
+		'-t',
+		'-u',
+		'-v',
+		'-w',
+		'-x',
+		'-y',
+		'-z'
+	);
 
+	return str_replace($alfa, $result, $name);
+}
+
+function getFontFamily($font){
+	$fonts = array(
+            'Verdana', 
+            'Geneva', 
+            'Sans-serif',
+            'Georgia', 
+            'Times New Roman', 
+            'Times',
+            'Serif',
+            'Courier New',
+            'Courier', 
+            'Monospace',
+            'Helvetica', 
+            'Tahoma',
+            'Trebuchet MS', 
+            'Arial', 
+            'Arial Black', 
+            'Gadget',
+            'Palatino Linotype', 
+            'Book Antiqua', 
+            'Palatino',
+            'Lucida Sans Unicode', 
+            'Lucida Grande',
+            'MS Serif', 
+            'New York',
+            'Lucida Console', 
+            'Monaco',
+            'Comic Sans MS', 
+            'Cursive',
+            'Rockwell Extra Bold'
+	);
+
+	sort($fonts);
+
+	for($i = 0; $i < count($fonts); $i++){
+		if($i == $font){
+			return $fonts[$i];
+		}
+	}
+
+	return 'Arial';
+}
 
  ?>

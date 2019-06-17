@@ -143,6 +143,27 @@ CREATE TABLE back_elements (
 )ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
+CREATE TABLE estilos (
+    id INT(11)  NOT NULL AUTO_INCREMENT,
+    id_docente INT(11) DEFAULT NULL,
+    name VARCHAR(255) DEFAULT NULL,
+    important id INT(1) DEFAULT 0,
+    estilos TEXT DEFAULT NULL,
+    PRIMARY KEY(id)
+
+)ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE back_estilos (
+    id INT(11)  NOT NULL AUTO_INCREMENT,
+    id_docente INT(11) DEFAULT NULL,
+    name VARCHAR(255) DEFAULT NULL,
+    important id INT(1) DEFAULT 0,
+    estilos TEXT DEFAULT NULL,
+    PRIMARY KEY(id)
+
+)ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
 
 
 

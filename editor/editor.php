@@ -8,7 +8,7 @@
 	$id = 1;
 	$tema = getTema($id);
 
-	
+	$estilos = getEstilos($tema->id_docente);
 
 
 	
@@ -136,12 +136,55 @@
 		border-radius: 2px
 	}
 
+	#close-class{
+		position: absolute;
+		top:50%;
+		right: 5px;
+		transform: translateY(-50%);
+	}
+
+	<?php
+		
+		foreach ($estilos as $key => $estilo) { 
+			$important = $estilo->important == 1 ? ' !important' : '';
+			print('.'.$estilo->name.'{');
+			
+			foreach ($estilo->estilos as $key => $css) {
+				
+				if(!(strpos($css['name'], 'textFill') === false) || !(strpos($css['name'], 'textStroke') === false)){
+					print('-webkit-'.toCss($css['name']).': '.$css['value'].$important.'; ');
+				}else if(!(strpos($css['name'], 'Family') === false)){
+					print(toCss($css['name']).': '.getFontFamily($css['value']).$important.'; ');
+			    }else{
+					print(toCss($css['name']).': '.$css['value'].$important.'; ');
+				}
+			}
+			print('}');
+		}
+
+
+	?>
+
 
 </style>
 <div id="modal-class" class="col-12 flex-col-start-center">
-	<div class="col-12 text-center bg-pimary text-white p-2">Vista Previa de Clase</div>
+	<div class="col-12 text-center bg-pimary text-white p-2">
+		Vista Previa de Clase
+		<i id="close-class" class="fa fa-times mr-2 hand cerrar"></i>
+	</div>
 	<div class="inner col-12 flex-row-center-center">
 		<div id="class-preview" class="flex-row-center-center">Vista Previa</div>
+	</div>
+	<div class="col-12 flex-row-center-center bg-white p-2">
+		<div class="flex-row-center-center mr-4 alert-warning p-1">
+			<label class="mr-2 mt-1" for="important">Aplicar Herencia</label>
+			<input id="important" data-on-color="success" data-off-color="danger" type="checkbox" data-on-text="SI" data-off-text="NO">
+		</div>
+		<button id="save-class" class="btn btn-success">
+			<i class="fa fa-save mr-1"></i>
+			<span>Guardar Estilo</span>
+		</button>
+		
 	</div>
 </div>
 <div id="modal-save-class" class="flex-col-start-center p-1 bg-white elevation-2">
@@ -152,10 +195,14 @@
 <div id="modal-edit" class="col-12 flex-col-start-start bg-white">
 	<div class="header bg-primary col-12 flex-row-between-center text-white p-1">
 		<span class="name">Elemento</span>
-		<div class="flex-row-center-center bg-white p-1 pl-3 pr-3">
+		<div class="flex-row-center-center alert alert-light p-1 pl-3 pr-3 m-0">
 			<div class="info-edit flex-row-center-center mr-3 text-dark p-1">Elemento Seleccionado</div>
 			<div class="info-sel flex-row-center-center ml-3 text-dark p-1">Elemento en Edicion</div>
 		</div>
+		<button id="add-class" class="btn btn-sm btn-warning">
+			<i class="fab fa-css3-alt mr-1"></i>
+			<span>Estilos Personalizados</span>
+		</button>
 		<i class="fa fa-times mr-2 hand cerrar"></i>
 	</div>
 	<menu id="menu-bar" class="col-12 flex-row-start-center m-0">
@@ -188,12 +235,19 @@
  <script>
 	var OBJ = null,
 		BOX = null,
-		//EDITOR = '<?php print($editor); ?>',
+		ESTILOS = getJson('<?php print(toJson($estilos)); ?>'),
 		device = '<?php print($device); ?>',
 		orientation = '<?php print($orientation); ?>',
 		TEMA = getJson('<?php print(toJson($tema)); ?>'),
 
-		modalInsert, modalTextos, modalDelete, modalDevice, modalIcons, modalReset, modalClass,
+		modalInsert, 
+		modalTextos, 
+		modalDelete, 
+		modalDevice, 
+		modalIcons, 
+		modalReset, 
+		modalClass,
+		modalDelClass,
 		menu = [
 			{name: 'texto', value:'text'},
 			{name: 'fondo', value:'background'},
@@ -244,6 +298,14 @@
         	title: 'Estilos Personalizados',
         	size: 'medium',
         	bg: 'bg-secondary'
+      	})
+	}
+
+	if(modalDelClass == null){
+		modalDelClass = new Modal({
+        	title: 'Dispositivos',
+        	size: 'small',
+        	bg: 'bg-danger'
       	})
 	}
 
@@ -486,7 +548,24 @@
 				]
 			break
 
+			case 'css':
+				menu = [
+					{name: 'Dimensiones', value:'size'},
+					{name: 'alineacion', value:'align'},
+					{name: 'texto', value:'text'},
+					{name: 'fondo', value:'background'},
+					{name: 'borde', value:'border'},
+					{name: 'margen', value:'margin'},
+					{name: 'relleno', value:'padding'},
+					{name: 'sombra', value:'shadow'},
+					{name: 'Redondear', value:'radius'},
+				]
+			break
 
+			default:
+				menu = []
+				$('#tools').load('tools/estilos.php')
+			break
 
 		}
 		$('#modal-edit').find('.name').text('Editando ' + getActual(tag))
@@ -554,9 +633,55 @@
  		}
  	}
 
+ 	function openClass(op){
+
+ 		var mod = $('#modal-class')
+ 		if(op){
+ 			mod.animate({top: 0}, 150)
+ 		}else{
+ 			mod.animate({top: '-500px'}, 150)
+ 		}
+ 		
+ 	}
+
  	function config(){
  		$('#modal-edit').find('.cerrar').click(function(){
  			openEditor(false)
+ 			openClass(false)
+ 		})
+
+ 		$('#close-class').click(function(){
+ 			openEditor(false)
+ 			openClass(false)
+
+ 		})
+
+ 		$('#add-class').click(function(){
+ 			setMenu('')
+ 			openEditor(true)
+
+ 		})
+
+ 		
+ 		
+
+ 		$('#save-class').click(function(){
+ 			var aj = new Ajax()
+			aj.add('action', 'saveEstilo')
+			aj.add('iddocente', TEMA.id_docente)
+			aj.add('idestilo', OBJ.data('id-estilo'))
+			aj.add('important', $('#important').prop('checked') ? 1 : 0)
+			ver(['send estilos', getCss(OBJ)])
+			aj.add('estilos', toJson(getCss(OBJ)))
+			loading(true)
+			aj.send('../php/main.php', function(data){
+				loading(false)
+				if(data.result == SUCCESS){
+					swal('GUARDAR','Estilo guardado correctamente', 'success')
+				}else{
+					swal('GUARDAR','Error al Guardar:' + data.message,'error')
+				}
+			})
  		})
 
  		$('.ver-demo').data('toggle','tooltip')
@@ -602,8 +727,13 @@
 			           .tooltip()
 			           .click(function(){
 			           		OBJ = $('#class-preview')
-			           		modalClass.openModal('tools/modalClass.php')
+			           		modalClass.openModal('tools/modalClass.php?docente=' + TEMA.id_docente)
 			           })
+
+		$('#important').data('toggle','tooltip')
+			           .prop('title', '"SI" Se aplica el Estilo al elemento seleccionado y a todos los elementos internos')
+			           .tooltip()
+
  		$('.column-toolbar').hide()
  		
 			           		
@@ -904,7 +1034,10 @@
 	 		tag = obj.prop('tagName').toLowerCase()
 	 	}
 	 	
+	 	if(obj.prop('id') == 'class-preview'){
+	 		tag = 'css'
 	 		//ver(['getcss', tag, obj.text(), obj.css('color')])
+	 	}
 	 	
 	 	ver(['css', tag , obj.html()])
 	 	switch(tag){
@@ -937,6 +1070,43 @@
 	 			css.push({name: 'boxShadow', value: obj.css('boxShadow')})
 	 			css.push({name: 'borderRadius', value: obj.css('borderRadius')})		
 	 			
+	 		break
+	 		case 'css':
+
+	 			css.push({name: 'fontFamily', value: getFontIndex(obj.css('fontFamily'))})
+				css.push({name: 'fontSize', value: obj.css('fontSize')})
+				css.push({name: 'letterSpacing', value: obj.css('letterSpacing')})
+				css.push({name: 'fontWeight', value: obj.css('fontWeight')})
+				css.push({name: 'textFillColor', value: obj.css('textFillColor')})
+				css.push({name: 'textShadow', value: obj.css('textShadow')})
+				css.push({name: 'textStrokeColor', value: obj.css('textStrokeColor')})
+				css.push({name: 'textStrokeWidth', value: obj.css('textStrokeWidth')})
+				css.push({name: 'fontStyle', value: obj.css('fontStyle')})
+				css.push({name: 'textTransform', value: obj.css('textTransform')})
+				css.push({name: 'textDecoration', value: obj.css('textDecoration')})
+				css.push({name: 'marginTop', value: obj.css('marginTop')})
+	 			css.push({name: 'marginBottom', value: obj.css('marginBottom')})
+	 			css.push({name: 'marginLeft', value: obj.css('marginLeft')})
+	 			css.push({name: 'marginRight', value: obj.css('marginRight')})
+	 			css.push({name: 'boxShadow', value: obj.css('boxShadow')})
+	 			css.push({name: 'borderRadius', value: obj.css('borderRadius')})
+	 			css.push({name: 'background', value: obj.css('background')})
+	 			css.push({name: 'borderTopColor', value: obj.css('borderTopColor')})
+	 			css.push({name: 'borderTopWidth', value: obj.css('borderTopWidth')})
+	 			css.push({name: 'borderTopStyle', value: obj.css('borderTopStyle')})
+	 			css.push({name: 'borderBottomColor', value: obj.css('borderBottomColor')})
+	 			css.push({name: 'borderBottomWidth', value: obj.css('borderBottomWidth')})
+	 			css.push({name: 'borderBottomStyle', value: obj.css('borderBottomStyle')})
+	 			css.push({name: 'borderLeftColor', value: obj.css('borderLeftColor')})
+	 			css.push({name: 'borderLeftWidth', value: obj.css('borderLeftWidth')})
+	 			css.push({name: 'borderLeftStyle', value: obj.css('borderLeftStyle')})
+	 			css.push({name: 'borderRightColor', value: obj.css('borderRightColor')})
+	 			css.push({name: 'borderRightWidth', value: obj.css('borderRightWidth')})
+	 			css.push({name: 'borderRightStyle', value: obj.css('borderRightStyle')})
+	 			css.push({name: 'paddingTop', value: obj.css('paddingTop')})
+	 			css.push({name: 'paddingBottom', value: obj.css('paddingBottom')})
+	 			css.push({name: 'paddingLeft', value: obj.css('paddingLeft')})
+	 			css.push({name: 'paddingRight', value: obj.css('paddingRight')})
 	 		break
 	 		default:
 
@@ -1131,8 +1301,9 @@
 	 		loading(false)
 	 		if(data.result == SUCCESS){
 	 			swal('GUARDAR','Guardado con Éxito','success').then((value) => {
-			  	location.reload(true);
-			});
+	 				$('#content-editor').load('editor.php?editor=1')
+			  		//location.reload(true);
+				});
 	 		}else{
 	 			swal('GUARDAR','Error al Guardar:' + data.message,'error')
 	 		}
@@ -1155,11 +1326,14 @@
 	 	if(EDITOR != 0){
 	 	 	setEditables()
 	 	 }
-	 	// ver(['full-page', $('#tema').html()])
+	 	//$('#tema').addClass('Demo')
 	 }
 
 	 function getActual(tag){
-	 	
+	 	if(tag == 'pre'){
+	 		tag = OBJ.children().prop('tagName').toLowerCase()
+
+	 	}
 	 	switch(tag){
 	 		case 'span': return 'Texto'; 
  			case 'h1': return 'Encabezado 1';

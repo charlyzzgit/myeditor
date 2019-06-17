@@ -62,14 +62,18 @@ switch($action){
 		
 	
 	break;
+	case 'saveEstilo':
+		echo saveEstilo($request);
+	break;
+	case 'deleteEstilo':
+		echo deleteEstilo($request);
+	break;
 	case 'saveImage':
 		echo 'uploaded';
 	break;
 	case 'ver':
-		$str = 'Hola!!
-
-		Mundo!!';
-		echo str_replace(array("\r", "\n"), '', $str); 
+		
+		echo toCss('borderColorTop');
 	break;
  }
 
