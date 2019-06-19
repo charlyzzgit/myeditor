@@ -129,6 +129,11 @@
  			case 'hr':
 	 				elem = $('<hr>') 
  			break
+
+ 			case 'imgGalery':
+ 				elem = $('<div class="flex-row-start-start flex-wrap galery"></div>')
+ 				
+ 			break
  		}
 
  		if(elem != null){
@@ -222,24 +227,39 @@
 			}
 		}else{
 			ver(['closest', OBJ.closest('td')])
-			if(OBJ.closest('td')){
-				alert(OBJ.prop('tagName'))
-				if(OBJ.prop('tagName') == 'TABLE'){
-					swal('ATENCION','Este sistema no permite tablas anidadas (Tablas dentro de otra Tabla), por favor escoja otro elemento u otro componente donde insertar una Tabla','warning')
-					$('#cancel').trigger('click')
-				}
-				return
+			// if(OBJ.closest('td')){
+			// 	alert(OBJ.prop('tagName'))
+			// 	if(OBJ.prop('tagName') == 'TABLE'){
+			// 		swal('ATENCION','Este sistema no permite tablas anidadas (Tablas dentro de otra Tabla), por favor escoja otro elemento u otro componente donde insertar una Tabla','warning')
+			// 		$('#cancel').trigger('click')
+			// 	}
+			// 	return
+			// }
+			var mtag = OBJ.prop('tagName').toLowerCase(),
+				obj = null
+
+			if(tag == 'table'){
+				obj = OBJ.closest('.scroll-table')
+			}else if(mtag == 'audio' || mtag == 'iframe'){
+				//alert('xx')
+				obj = OBJ.closest('.media-box')
+			}else if(mtag == 'galery'){
+				obj = OBJ.closest('.galery')
+			}else{
+				obj = OBJ
 			}
 			switch(parseInt(insert)){
 				case 0: 
-					OBJ.before(getInsert(tag))
+					obj.before(getInsert(tag))
 				break
 				case 1: 
-					OBJ.after(getInsert(tag))
+					obj.after(getInsert(tag))
 				break
 				case 2: 
-					OBJ.after('<div class="col-12"></div>')
-					OBJ.after(getInsert(tag))
+					ver(['debajo'])
+					var jump = $('<div class="col-12 jump"></div>')
+					obj.after(jump)
+					jump.after(getInsert(tag))
 				break
 			}
 		}

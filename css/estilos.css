@@ -15,7 +15,11 @@ body{
  	min-height: 100vh
  }    
 
-
+ hr{
+  background: rgba(0, 0, 0, 1);
+  width: 100%;
+  height: 1px;
+ }
  header{
  	height: 5vh
  }   
@@ -195,6 +199,44 @@ body{
   height: 100%
 }
 
+.galery{
+  min-width: 100px;
+  max-width: 100%;
+  min-height: 100px;
+  background: rgba(255, 255, 255, 1);
+  padding: 5px;
+  border: solid 1px gray;
+  
+}
+
+.img-gal-min{
+  object-fit: cover;
+  width: 100px;
+  height: 100px;
+  margin:2px;
+}
+
+.img-gal-small{
+  object-fit: cover;
+  width: 200px;
+  height: 200px;
+  margin:2px;
+}
+
+.img-gal-medium{
+  object-fit: cover;
+  width: 300px;
+  height: 300px;
+  margin:2px;
+}
+
+.img-gal-big{
+  object-fit: cover;
+  width: 500px;
+  height: 500px;
+  margin:2px;
+}
+
 
 table th, table td {
      vertical-align: middle !important;
@@ -241,6 +283,13 @@ table th, table td {
     .video-small{
       width: 90%;
       height:auto
+    }
+
+    .img-gal-big{
+      object-fit: cover;
+      width: 100%;
+      height: auto;
+      margin:2px;
     }
 }
 

@@ -143,6 +143,49 @@
 		transform: translateY(-50%);
 	}
 
+	.menu-item{
+		font-size: 14px
+	}
+
+	#modal-galery{
+		width:100%;
+		height:100%;
+		position:fixed;
+		top:0;
+		left:0;
+		background:rgba(0, 0, 0, .9);
+		z-index:10000;
+		display:none;
+	}
+
+	#modal-galery-close{
+		position: absolute;
+		top:20px;
+		right:20px;
+		font-size:40px;
+		cursor: pointer;
+		opacity: .5;
+		
+	}
+
+	#box-galery{
+		height:100%;
+	}
+
+	#box-galery img{
+		max-width: 80%;
+		max-height: 80%;
+	}
+
+	#box-galery .fas{
+		font-size: 50px;
+		opacity: .5;
+	}
+
+	#modal-galery-close:hover, #box-galery .fas:hover{
+		opacity: 1;
+	}
+
 	<?php
 		
 		foreach ($estilos as $key => $estilo) { 
@@ -167,6 +210,15 @@
 
 
 </style>
+<div id="modal-galery">
+	<div id="box-galery" class="col-12 flex-row-between-center p-4">
+		<i id="modal-galery-close" class="fa fa-times text-white"></i>
+		<i class="arrow fas fa-angle-left text-white" data-dir="-1"></i>
+		<img>
+		<i class="arrow fas fa-angle-right text-white" data-dir="1"></i>
+	</div>
+	
+</div>
 <div id="modal-class" class="col-12 flex-col-start-center">
 	<div class="col-12 text-center bg-pimary text-white p-2">
 		Vista Previa de Clase
@@ -236,10 +288,11 @@
 	var OBJ = null,
 		BOX = null,
 		ESTILOS = getJson('<?php print(toJson($estilos)); ?>'),
+		GALERY = [],
 		device = '<?php print($device); ?>',
 		orientation = '<?php print($orientation); ?>',
 		TEMA = getJson('<?php print(toJson($tema)); ?>'),
-
+		FILES = [], //imagenes y archivos para limpiar en el server
 		modalInsert, 
 		modalTextos, 
 		modalDelete, 
@@ -365,6 +418,7 @@
 			case 'p':
 				menu = [
 					{name: 'texto', value:'text'},
+					{name: 'etiqueta', value:'label'},
 					{name: 'fondo', value:'background'},
 					{name: 'borde', value:'border'},
 					{name: 'margen', value:'margin'},
@@ -457,6 +511,7 @@
 					{name: 'predefinido', value:'table_style'},
 					{name: 'borde', value:'border'},
 					{name: 'margen', value:'margin'},
+					{name: 'insertar', value:'insert'},
 					{name: 'restablecer', value:'reset'},
 					{name: 'eliminar', value:'delete'},
 					
@@ -560,6 +615,25 @@
 					{name: 'sombra', value:'shadow'},
 					{name: 'Redondear', value:'radius'},
 				]
+			break
+
+			case 'div':
+				if(OBJ.hasClass('galery')){
+					menu = [
+						{name: 'Galería', value:'galery'},
+						{name: 'alineacion', value:'align'},
+						{name: 'fondo', value:'background'},
+						{name: 'borde', value:'border'},
+						{name: 'margen', value:'margin'},
+						{name: 'relleno', value:'padding'},
+						{name: 'sombra', value:'shadow'},
+						{name: 'Redondear', value:'radius'},
+						{name: 'insertar', value:'insert'},
+						{name: 'restablecer', value:'reset'},
+						{name: 'eliminar', value:'delete'}
+					]
+				}
+
 			break
 
 			default:
@@ -711,7 +785,7 @@
 			           .prop('title', 'Guardar Todo')
 			           .tooltip()
 			           .click(function(){
-			           		save()
+			           		save('save')
 			           })
 
 		$('.restore').data('toggle','tooltip')
@@ -1208,6 +1282,33 @@
 	 	})
 	 }
 
+	 function getFiles(col){
+	 	var files = []
+	 	col.find('img, audio, a').each(function(){
+	 		var obj = $(this), 
+	 			src = obj.prop('src')
+	 		if(src != null){
+	 			if(src != ''){
+	 				var dir = null
+	 				if(exists(src, 'myeditor/img')){
+	 					dir = 'img'
+	 				}else if(exists(src, 'myeditor/files')){
+	 					dir = 'files'
+	 				}
+	 				if(dir != null){
+	 					var v = src.split('/')
+	 					files.push({
+	 						dir: dir, 
+	 						file: v[v.length - 1]
+	 					})
+	 				}
+	 			}
+	 		}
+	 	
+	 	})
+	 	return files
+	 }
+
 	 function setTooltip(obj){
 	 	
 		obj
@@ -1227,7 +1328,7 @@
 	 	})
 	 }
 
-	 function save(){
+	 function save(type){
 	 	TEMA.estilos = getCss($('#tema'))
 	 	TEMA.clases = $('#tema').prop('class')
 
@@ -1263,6 +1364,7 @@
 		 			
 	 			})
 	 			ver(['content', getCss(col)])
+	 			//ver(['files = ', 'col ' + i ,getFiles(col)])
 	 			columnas.push({
 	 					id: idcol,
 	 					numero: i + 1,	
@@ -1271,9 +1373,11 @@
 	 					distribution: col.data('distribution'),
 	 					clases: col.prop('class'),	
 	 					estilos: getCss(col),
+	 					
 	 					//elements: elements, 
 	 					content: base64Encode(col.html())
 	 				})
+	 			FILES = FILES.concat(getFiles(col))
 
 	 		})
 	 		var	fila = {
@@ -1292,24 +1396,58 @@
 	 		TEMA.filas.push(fila)
 	 	})
 
+	 	TEMA.files = FILES
+	 	ver(['FILES', TEMA.files])
 	 	var aj = new Ajax()
 	 	aj.add('action', 'savePageTema')
 	 	aj.add('tema', toJson(TEMA))
-
+	 	ver(['FILES', FILES])
+	 	FILES = []
 	 	loading(true)
 	 	aj.send('../php/main.php', function(data){
 	 		loading(false)
+	 		var mesage = ''
+	 		ver(['save result', data])
 	 		if(data.result == SUCCESS){
-	 			swal('GUARDAR','Guardado con Éxito','success').then((value) => {
+	 			message = type == 'save' ? 'Guardado con Éxito' : 'Elemento Removido'
+	 			swal('GUARDAR', message,'success').then((value) => {
 	 				$('#content-editor').load('editor.php?editor=1')
 			  		//location.reload(true);
 				});
 	 		}else{
+	 			message = type == 'save' ? 'Error al Guardar:' : 'Error al Remover:'
 	 			swal('GUARDAR','Error al Guardar:' + data.message,'error')
 	 		}
 	 	})
 	 	//console.clear()
 	 	//ver(['send', TEMA])
+	 }
+
+	 function openModalGalery(image){
+	 	
+	 	$('#modal-galery').find('img').prop('src', image.prop('src'))
+	 	$('#modal-galery').fadeIn(150)
+	 }
+
+	 function setAntSigGalery(){
+	 	$('#modal-galery').find('.arrow').click(function(){
+	 		var dir = parseInt($(this).data('dir')),
+	 			pos = parseInt($('#modal-galery').data('pos'))
+	 		if(dir > 0){
+	 			pos++
+	 			if(pos >= GALERY.length){
+	 				pos = 0
+	 			}
+	 		}else{
+	 			pos--
+	 			if(pos < 0){
+	 				pos = GALERY.length - 1
+	 			}
+	 		}
+	 		$('#modal-galery').data('pos', pos)
+	 		$('#modal-galery').find('img').prop('src', GALERY[pos])
+
+	 	})
 	 }
 
 	 function setTema(){
@@ -1322,9 +1460,31 @@
 	 		$('#filas').append(getFila(fila))
 	 	})
 	 	
-	 	
+	 	$('#modal-galery').find('#modal-galery-close').click(function(){
+	 		$('#modal-galery').fadeOut(150)
+	 	})
+	 	setAntSigGalery()
+	 	$('.galery').each(function(){
+	 		$(this).find('img').each(function(index){
+	 			$(this)
+	 				.data('pos', index)
+	 				.click(function(evt){
+	 					evt.stopPropagation()
+	 					$('#modal-galery').data('pos', $(this).data('pos'))
+	 					GALERY = []
+	 					$(this).closest('.galery').find('img').each(function(){
+	 						GALERY.push($(this).prop('src'))
+	 					})
+	 					openModalGalery($(this))
+	 				})
+	 		})
+	 	})
+	 				
 	 	if(EDITOR != 0){
 	 	 	setEditables()
+	 	 }else{
+	 	 	$('.editable, .selected, .media-click').remove()
+
 	 	 }
 	 	//$('#tema').addClass('Demo')
 	 }
@@ -1380,6 +1540,7 @@
 	 	config()
 	 }else{
 	 	$('#tool-tema').hide()
+
 	 }
 	$('#media-editor').hide()
 	 setTema()

@@ -47,7 +47,9 @@
 		{name: 'Video', tag: 'iframe', icon:'fa fa-video'},
 		{name: 'Audio', tag: 'audio', icon:'fa fa-volume-up'},
 		{name: 'Linea', tag: 'hr', icon:''},
-		{name: 'Icono', tag: 'icon', icon:'fa fa-user'}
+		{name: 'Icono', tag: 'icon', icon:'fa fa-user'},
+		{name: 'Galería Imágenes', tag: 'imgGalery', icon:'fas fa-images'}
+		//fa-audio-description
 
 	], 
 	tag = OBJ.prop('tagName').toLowerCase()
@@ -99,17 +101,28 @@
 			li.find('div').data('tag', btn.tag).click(function(){
 				var mtag = $(this).data('tag')
 			
-				if(mtag == 'span'){
-					//alert('a')
-					modalTextos.openModal('tools/modalTextos.php?box=col')
+				if(mtag == 'span'){ //si es texto va a la modal de seleccion de tipo de texto
+					if(OBJ.hasClass('editable')){
+						//alert('b')
+						var box = (tag == 'td') ? 'col' : 'element'
+						modalTextos.openModal('tools/modalTextos.php?box=' + box)
+					}else{
+						//alert('c')
+						modalTextos.openModal('tools/modalTextos.php?box=col')
+					}
+					
 				}else{
 					if(OBJ.hasClass('editable')){
 						//alert('b')
-						var box = tag == 'td' ? 'col' : 'element'
+						var box = (tag == 'td') ? 'col' : 'element'
 						modalInsert.openModal('tools/modalInsert.php?tag=' + mtag + '&box=' + box)
 					}else{
-						//alert('c')
-						modalInsert.openModal('tools/modalInsert.php?tag=' + mtag + '&box=col')
+						var box = 'col'
+						//alert(OBJ.prop('class'))
+						if(OBJ.hasClass('media')){
+							box = 'element'
+						}
+						modalInsert.openModal('tools/modalInsert.php?tag=' + mtag + '&box=' + box)
 					}
 				}
 			})

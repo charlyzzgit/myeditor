@@ -9,10 +9,10 @@
 	}
 </style>
 <div id="form-tool" class="col-12 flex-row-center-start">
-	<div class="sector col-6 flex-row-center-start border p-2">
+	<div class="sector col-6 flex-row-center-start border p-5">
 		<div id="width" class="col-12"></div>
 	</div>
-	<div class="sector col-6 flex-row-center-start border p-2">
+	<div class="sector col-6 flex-row-center-start border p-5">
 		<div id="height" class="col-12"></div>
 	</div>
 </div>
@@ -53,5 +53,8 @@
 			     minimize:true
 			  })
 	
-
+	if(OBJ.prop('tagName') == 'TABLE'){
+		$('.sector:last-child').hide()
+		
+	}
 </script>

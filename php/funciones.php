@@ -78,8 +78,13 @@ function createDir($dir){
 	}
 }
 
-function fileExists($url){
-
+function fileExists($files, $file){
+	for($i = 0; $i < count($files); $i++){
+		if($files[$i] == $file){
+			return true;
+		}
+	}
+	return false;
 }
 
 function getNameDir($name){
@@ -103,8 +108,9 @@ function setfoto($directorio, $file, $foto){
 
 function delfoto($dir){
 	if(file_exists($dir)){ 
- 		unlink($dir);
+ 		return unlink($dir);
 	}
+	return $dir.' not found';
 }
 
 function mover($desde, $dir_destino){
@@ -357,7 +363,19 @@ function getBack($tipo){
 	return 'background-position:center; background-repeat:no-repeat !important; background-size:'.$tipo.'; background-image:none;';
 }
 
-
+function getAllArchivos($dir){
+	$i = 0;
+	$v = array();
+	$directorio=opendir($dir); 
+	while ($archivo = readdir($directorio)){
+		 $v[$i++] = $archivo;
+	}
+	
+	closedir($directorio);
+	
+	natcasesort($v); //esto ordena x nombre
+	return $v;
+}
 
 
 function getArchivos($dir, $ext){

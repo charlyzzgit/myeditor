@@ -266,10 +266,17 @@
 							var noImage = 'Form/noimage.png',
 								src = (input.src != null) ? (input.src != '' ? input.src : noImage) : noImage 
 							box.find('.form-lbl').after('<div class="box-file col-12 p-0">\
-														<img class="img-thumbnail form-hand">\
+														<img class="img-thumbnail form-hand m-1">\
 														<input type="file" class="input-file bg-dark">\
 														</div>')
-							box.find('img').prop('src', src).prop('width', (input.size != null) ? input.size : 100)
+							box.find('img')
+											.prop('src', src)
+											.css({
+												objectFit:'cover',
+												width:((input.size != null) ? input.size : 100) + 'px',
+												height:((input.size != null) ? input.size : 100) + 'px'
+											})
+											
 							box.find('input').change(function(){
 								var file = $(this)[0].files[0],
 									callBack = $(this).data('exe'),
@@ -508,6 +515,12 @@
 					if(input.label == null){
 						box.find('.form-lbl').remove()
 					}
+
+
+					// if(input.autoBox != null){
+						
+					// 	box.css('width', 'auto !important')
+					// }
 
 					
 					return box

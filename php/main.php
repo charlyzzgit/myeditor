@@ -72,8 +72,9 @@ switch($action){
 		echo 'uploaded';
 	break;
 	case 'ver':
-		
-		echo toCss('borderColorTop');
+		$v = array('river', 'boca', 'san lorenzo', 'velez');
+		removeElement($v, 'boca');
+		var_dump($v);
 	break;
  }
 

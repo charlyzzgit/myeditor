@@ -204,10 +204,50 @@ function savePageTema($tema){
 				return $save;
 		    }
 		}
+		//$d = clearFiles($tema);
 		return toJson(array('result' => SUCCESS));
 	}else{
 		return toJson(array('result' => 'ERROR', 'message' => 'Error en Tema: '.$sql->getError()));
 	}
+}
+
+function removeElement(&$array, $name){
+	foreach ($array as $key => $value) {
+		if($value == $name){
+			unset($array[$key]);
+		}
+	}
+
+}
+
+function clearFiles($tema){
+	$dels = array();
+	$url = 'docente-'.$tema['id_docente'].'/curso-'.$tema['id_curso'].'/modulo-'.$tema['id_modulo'].'/clase-'.$tema['id_clase'].'/tema-'.$tema['id'].'/';
+	$files = getAllArchivos('../files/'.$url);
+	$images = getAllArchivos('../img/'.$url);
+	foreach ($tema['files'] as $key => $file) {
+		if($file['dir'] == 'img'){
+			if(fileExists($images, $file['file'] )){
+				removeElement($images, $file['file']);
+			}
+		}else if($file['dir'] == 'files'){
+			if(fileExists($files, $file['file'] )){
+				removeElement($files, $file['file']);
+			}
+		}
+		
+		
+	}
+
+	foreach ($images as $key => $image) {
+		delfoto('../img/'.$url.$image);
+	}
+
+	foreach ($files as $key => $file) {
+		delfoto('../files/'.$url.$file);
+	}
+
+	return $dels;
 }
 
 function getCss($style){

@@ -1359,3 +1359,56 @@ function getRootLocation(dir){
 }
 
 
+function unirHasta(vec, n){
+	var aux = []
+	$.each(vec, function(i, e){
+		if(i < n){
+			aux.push(e)
+		}
+	})
+	return aux
+}
+
+function flexAlign(clas){
+	var flex = [
+			{name: 'flex-row-start-start', align: 'start', valign: 'start'},
+			{name: 'flex-row-start-center', align: 'start', valign: 'center'}, 
+			{name: 'flex-row-start-end', align: 'start', valign: 'end'}, 
+			{name: 'flex-row-center-start', align: 'center', valign: 'start'},
+			{name: 'flex-row-center-center', align: 'center', valign: 'center'}, 
+			{name: 'flex-row-center-end',  align: 'center', valign: 'end'},
+			{name: 'flex-row-end-start', align: 'end', valign: 'start'},
+			{name: 'flex-row-end-center', align: 'end', valign: 'center'}, 
+			{name: 'flex-row-end-end', align: 'end', valign: 'end'}, 
+			{name: 'flex-row-between-start', align: 'between', valign: 'start'},
+			{name: 'flex-row-between-center', align: 'between', valign: 'center'}, 
+			{name: 'flex-row-between-end', align: 'between', valign: 'end'}, 
+			{name: 'flex-row-around-start', align: 'around', valign: 'start'},
+			{name: 'flex-row-around-center', align: 'around', valign: 'center'}, 
+			{name: 'flex-row-around-end', align: 'around', valign: 'end'}, 
+			{name: 'flex-col-start-start', align: 'start', valign: 'start'}, 
+			{name: 'flex-col-start-center', align: 'center', valign: 'start'}, 
+			{name: 'flex-col-start-end', align: 'end', valign: 'start'}, 
+			{name: 'flex-col-start-between', align: 'between', valign: 'start'},
+			{name: 'flex-col-start-around', align: 'around', valign: 'start'},  
+			{name: 'flex-col-center-start', align: 'start', valign: 'center'}, 
+			{name: 'flex-col-center-center', align: 'center', valign: 'center'}, 
+			{name: 'flex-col-center-end', align: 'end', valign: 'center'}, 
+			{name: 'flex-col-center-between', align: 'between', valign: 'center'}, 
+			{name: 'flex-col-center-around', align: 'around', valign: 'center'}, 
+			{name: 'flex-col-end-start',  align: 'start', valign: 'end'},
+			{name: 'flex-col-end-center', align: 'center', valign: 'end'}, 
+			{name: 'flex-col-end-end', align: 'end', valign: 'end'}, 
+			{name: 'flex-col-end-between', align: 'between', valign: 'end'}, 
+			{name: 'flex-col-end-around',  align: 'around', valign: 'end'},
+			
+		]
+
+	for(var i = 0; i < flex.length; i++){
+		if(exists(clas, flex[i].name)){
+			return flex[i]
+		}
+	}
+	return null
+}
+
