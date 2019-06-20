@@ -44,11 +44,12 @@
 		{name: 'Lista', tag: 'ul', icon:'fa fa-list-ul'},
 		{name: 'Tabla', tag: 'table', icon:'fa fa-table'},
 		{name: 'Imágen', tag: 'img', icon:'fa fa-image'},
-		{name: 'Video', tag: 'iframe', icon:'fa fa-video'},
+		{name: 'Video', tag: 'iframe', icon:'fab fa-youtube'},
 		{name: 'Audio', tag: 'audio', icon:'fa fa-volume-up'},
 		{name: 'Linea', tag: 'hr', icon:''},
 		{name: 'Icono', tag: 'icon', icon:'fa fa-user'},
-		{name: 'Galería Imágenes', tag: 'imgGalery', icon:'fas fa-images'}
+		{name: 'Galería Imágenes', tag: 'imgGalery', icon:'fas fa-images'},
+		{name: 'Galería Videos', tag: 'videoGalery', icon:'fab fa-youtube-square'}
 		//fa-audio-description
 
 	], 

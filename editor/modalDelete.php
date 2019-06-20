@@ -59,50 +59,17 @@
  				
  			break
  			case 'column':
- 				var idcol = parseInt(id.split('-')[1])
- 				if(idcol != 0){
-	 				var aj = new Ajax()
-	 				aj.add('action', 'emptyCol')
-	 				aj.add('idcol', idcol)
-	 				loading(true)
-	 				aj.send('../php/main.php', function(data){
-	 					loading(false)
-	 					if(data.result == SUCCESS){
-	 						OBJ.empty()
-	 						openEditor(false)
-	 						swal('VACIAR','Los elementos de esta Columna fueron removidos con éxito','success')
-	 					}else{
-	 						swal('VACIAR','No se pudo vaciar esta Columna:' + data.message,'error')
-	 					}
-	 				})
-	 			}else{
+ 				
 	 				OBJ.empty()
+	 				save('delete')
 	 				openEditor(false)
 	 				swal('VACIAR','Los elementos de esta columna fueron removidos con éxito')
-	 			}
+	 			
  			break
  			case 'element':
- 				var idelement = parseInt(id.split('-')[1])
- 				if(idelement != 0){
-	 				var aj = new Ajax()
-	 				aj.add('action', 'delElement')
-	 				aj.add('idelement', idelement)
-	 				loading(true)
-	 				aj.send('../php/main.php', function(data){
-	 					loading(false)
-	 					if(data.result == SUCCESS){
-	 						OBJ.remove()
-	 						openEditor(false)
-	 						swal('ELIMINAR','Elemento Removido','success')
-	 					}else{
-	 						swal('ELIMINAR','No se pudo eliminar este Elemento:' + data.message,'error')
-	 					}
-	 				})
-	 			}else{
-	 				OBJ.remove()
-	 				openEditor(false)
-	 				swal('ELIMINAR','Elemento Removido','success')
-	 			}
+ 				
+	 			OBJ.remove()
+	 			save('delete')
  				
  			break
  		}

@@ -79,7 +79,10 @@ function createDir($dir){
 }
 
 function fileExists($files, $file){
+	alert('IMAGEN: '.$file);
+	alert('********************');
 	for($i = 0; $i < count($files); $i++){
+		alert('FE:'.$files[$i].' == '.$file);
 		if($files[$i] == $file){
 			return true;
 		}

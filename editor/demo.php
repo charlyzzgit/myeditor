@@ -25,7 +25,7 @@
   <link rel="stylesheet" type="text/css" href="../css/flex.css?0.0.3">  
   <link rel="stylesheet" type="text/css" href="../Form/form.css?0.0.11">
 	<link rel="stylesheet" type="text/css" href="../css/flex.css?0.0.3">
-  <link rel="stylesheet" type="text/css" href="../css/estilos.css?0.0.0">
+  <link rel="stylesheet" type="text/css" href="../css/estilos.css?0.0.1">
   <style>
     body{
       background: gray

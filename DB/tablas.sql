@@ -47,6 +47,8 @@ CREATE TABLE columnas (
     distribution VARCHAR(255) NOT NULL DEFAULT 'wrap',
     clases TEXT DEFAULT NULL,
     estilos TEXT DEFAULT NULL,
+    content TEXT DEFAULT NULL,
+    visible INT(1) DEFAULT 1,
     PRIMARY KEY(id)
 
 )ENGINE=MyISAM DEFAULT CHARSET=utf8;

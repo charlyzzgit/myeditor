@@ -45,7 +45,8 @@ function getFont(index){
 function getFontIndex(name){
    var index = -1
    for(var i = 0; i < fuentes.length; i++){
-      if(fuentes[i].toLowerCase() == name.replace(/['"]+/g, '')){
+       ver(['font --->', fuentes[i].toLowerCase(), name.replace(/['"]+/g, '')])
+      if(fuentes[i] == name.replace(/['"]+/g, '')){
             index = i
             break
       }

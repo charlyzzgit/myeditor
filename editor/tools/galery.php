@@ -15,7 +15,8 @@
 	<div class="col-8 flex-col-start-center">
 		<div id="images" class="sector col-12 flex-row-start-start flex-wrap border"></div>
 		<div class="flex-row-center-center" style="height: 50px">
-			<button id="add-image" class="btn btn-primary">Agregar Imágen</button>
+			<button id="add-image" class="btn btn-primary mr-2">Agregar Imágen</button>
+			<button id="del-image" class="btn btn-danger ml-2">Quitar Imágen</button>
 		</div>
 	</div>
 	<div class="col-4 flex-row-between-start">
@@ -130,7 +131,16 @@
 		OBJ.append(img)
 		loadImages()
 	})
+	.data('toggle','tooltip')
+	.prop('title', 'Agrega una Imágen Lista para cargar')
+	.tooltip()
 
+	$('#del-image').click(function(){
+		modalDelGal.openModal('tools/modalDelGalery.php?tag=img')
+	})
+	.data('toggle','tooltip')
+	.prop('title', 'Abre un Selector de Imágenes para eliminar la Imágen elegida')
+	.tooltip()
 	
 </script>
 

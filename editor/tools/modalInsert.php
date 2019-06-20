@@ -134,6 +134,10 @@
  				elem = $('<div class="flex-row-start-start flex-wrap galery"></div>')
  				
  			break
+ 			case 'videoGalery':
+ 				elem = $('<div class="video-galery"></div>')
+ 				
+ 			break
  		}
 
  		if(elem != null){

@@ -31,12 +31,8 @@ switch($action){
 		$tema = getJson(getPost($request, 'tema', NULL));
 		echo savePageTema($tema);
 	break;
-	case 'delElement':
-		echo deleteElement(getPost($request, 'idelement', NULL));
-	break;
-	case 'emptyCol':
-		echo emptyColumna(getPost($request, 'idcol', NULL));
-	break;
+	
+	
 	case 'delFila':
 		echo deleteFila(getPost($request, 'idfila', NULL));
 	break;
@@ -72,9 +68,7 @@ switch($action){
 		echo 'uploaded';
 	break;
 	case 'ver':
-		$v = array('river', 'boca', 'san lorenzo', 'velez');
-		removeElement($v, 'boca');
-		var_dump($v);
+		
 	break;
  }
 

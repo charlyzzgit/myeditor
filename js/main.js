@@ -1,6 +1,7 @@
 'use strict'
 var SUCCESS = 'OK',
-	IMG = '../img/iconos/'
+	IMG = '../img/iconos/',
+	editor = 1
 
 
 function loading(e){
@@ -28,28 +29,7 @@ function $_GET(q,s) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-$(function(){
-	var editor = 1
+function loadPage(){
 	if(exists(window.location.href, 'demo')){
 		var dv = $_GET('device'),
 			or = $_GET('orientation'),
@@ -88,8 +68,104 @@ $(function(){
 			break
 		}
 		$('.container-fluid').addClass(clas)
-		 
+		$('#content-editor').load('editor.php?editor=' + editor + '&device=' + dv + '&orientation=' + or)
+	}else{
+		var page = $_GET('page') !== undefined ? $_GET('page') : 'temas'
+		var params = $_GET('params')
+		var post = ''
+		if(params != null){
+			try{
+				params = getJson(params)
+				$.each(params, function(i, param){
+					if(i == 0){
+						post += '?'
+					}else{
+						post += '&'
+					}
+					post += param.name + '=' + param.value
+						
+				})
+			}catch(e){}
+		}
+		ver(['page', page])
+		$('#content-editor').load(page + '.php' + post)
 	}
-	loading(null)
-	$('#content-editor').load('editor.php?editor=' + editor + '&device=' + dv + '&orientation=' + or)
+
+}
+function goTo(page, params){
+	if(exists(window.location.href, 'demo')){
+		var dv = $_GET('device'),
+			or = $_GET('orientation'),
+			clas = ''
+		editor = 0
+		
+		switch(dv){
+			// case 'desktop':
+			// 	clas = 'demo-desktop'
+			// break
+			case 'tablet':
+				if(or == 'portrait'){
+					clas = 'demo-tablet-portrait'
+				}else{
+					clas = 'demo-tablet-landscape'
+				}
+				$('.container-fluid')
+									.addClass('demo-border')
+									.css({
+										minHeight: 'inherit', 
+										overflowY:'auto'
+									})
+			break
+			case 'smartphone':
+				if(or == 'portrait'){
+					clas = 'demo-smartphone-portrait'
+				}else{
+					clas = 'demo-smartphone-landscape'
+				}
+				$('.container-fluid')
+									.addClass('demo-border')
+									.css({
+										minHeight: 'inherit', 
+										overflowY:'auto'
+									})
+			break
+		}
+		$('.container-fluid').addClass(clas)
+		var par = [
+			{name: 'device', value: dv},
+			{name: 'orientation', value: or}
+		]
+		window.location = 'index.html?page=editor&params=' + toJson(par)
+		 //$('#content-editor').load('editor.php?editor=' + editor + '&device=' + dv + '&orientation=' + or)
+	}else{
+
+		window.location = 'index.html?page=' + page + '&params=' + toJson(params)
+	}
+
+	//loading(false)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$(function(){
+	editor = 1
+	$('#back').click(function(){
+		window.history.back()
+	})
+	loadPage()
 })

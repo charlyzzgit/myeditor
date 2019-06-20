@@ -2,14 +2,12 @@
 	error_reporting(1);
 	require '../php/scripts.php';
 	$request = $_REQUEST;
-	//$editor = getPost($request, 'editor', 0);
 	$device = getPost($request, 'device', NULL);
 	$orientation = getPost($request, 'orientation', 'portrait');
 	$id = 1;
 	$tema = getTema($id);
 
 	$estilos = getEstilos($tema->id_docente);
-
 
 	
  ?>
@@ -215,6 +213,7 @@
 		<i id="modal-galery-close" class="fa fa-times text-white"></i>
 		<i class="arrow fas fa-angle-left text-white" data-dir="-1"></i>
 		<img>
+		<iframe class="video-gal-medium" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
 		<i class="arrow fas fa-angle-right text-white" data-dir="1"></i>
 	</div>
 	
@@ -240,7 +239,8 @@
 	</div>
 </div>
 <div id="modal-save-class" class="flex-col-start-center p-1 bg-white elevation-2">
-	<button class="save btn btn-info btn-sm"><i class="fa fa-save"></i></button>
+	<button id="up" class="btn btn-warning btn-sm"><i class="fas fa-arrow-up"></i></button>
+	<button class="save btn btn-info btn-sm mt-2"><i class="fa fa-save"></i></button>
 	<button class="add-css btn btn-secondary btn-sm mt-2"><i class="fa-css3-alt fab"></i></button>
 </div>
 <div id="media-editor" class="flex-row-center-center"><button class="btn btn-warning"></button></div>
@@ -269,6 +269,7 @@
 		<h1 id="titulo-tema" class="editable">Titulo Tema</h1>
 		
 		<div id="tool-tema" class="flex-row-start-center">
+			<button id="btn-help" class="btn btn-sm btn-link mr-2"><i class="fas fa-question-circle" style="font-size: 30px"></i></button> 
 			<button class="ver-demo btn btn-dark btn-sm mr-2"><i class="fa fa-desktop"></i></button>
 			<button class="tema-edit btn btn-success btn-sm mr-2"><i class="fa fa-pen"></i></button>
 			<button class="add-fila btn btn-primary btn-sm mr-2"><i class="fa fa-plus"></i></button>
@@ -301,6 +302,8 @@
 		modalReset, 
 		modalClass,
 		modalDelClass,
+		modalDelGal,
+		modalHelp,
 		menu = [
 			{name: 'texto', value:'text'},
 			{name: 'fondo', value:'background'},
@@ -359,6 +362,22 @@
         	title: 'Dispositivos',
         	size: 'small',
         	bg: 'bg-danger'
+      	})
+	}
+
+	if(modalDelGal == null){
+		modalDelGal = new Modal({
+        	title: 'Galería',
+        	size: 'big',
+        	bg: 'bg-danger'
+      	})
+	}
+
+	if(modalHelp == null){
+		modalHelp = new Modal({
+        	title: 'Estructura de Contenido',
+        	size: 'big',
+        	bg: 'bg-info'
       	})
 	}
 
@@ -634,6 +653,28 @@
 					]
 				}
 
+				if(OBJ.hasClass('video-galery')){
+					menu = [
+						{name: 'Galería', value:'video_galery'},
+						{name: 'alineacion', value:'align'},
+						{name: 'fondo', value:'background'},
+						{name: 'borde', value:'border'},
+						{name: 'margen', value:'margin'},
+						{name: 'relleno', value:'padding'},
+						{name: 'sombra', value:'shadow'},
+						{name: 'Redondear', value:'radius'},
+						{name: 'insertar', value:'insert'},
+						{name: 'restablecer', value:'reset'},
+						{name: 'eliminar', value:'delete'}
+					]
+				}
+
+				if(OBJ.hasClass('jump')){
+					menu = [
+						{name: 'eliminar', value:'delete'}
+					]
+				}
+
 			break
 
 			default:
@@ -736,7 +777,13 @@
 
  		})
 
- 		
+ 		$('#btn-help').click(function(){
+ 			modalHelp.openModal('modalExample.php')
+ 		})
+
+ 		$('#up').click(function(){
+ 			$('html, body').animate({scrollTop: 0}, 250)
+ 		})
  		
 
  		$('#save-class').click(function(){
@@ -778,7 +825,7 @@
 			           .prop('title', 'Insertar Bloque')
 			           .tooltip()
 			           .click(function(){
-			           	  $('#filas').append(getFila(null))
+			           	  $('#filas').append(getFila(null, $('.fila').length))
 			           })
 
 		$('.save').data('toggle','tooltip')
@@ -866,11 +913,12 @@
 	 		id = (column != null) ? column.id : 0,
 	 		elements = (column != null) ? column.elements : [],
 	 		col_n = ''
-	 	
+	 	col.data('num', (column != null) ? column.numero : n)
 	 	col.find('.col-content').data('align', (column != null) ? column.align : 'start')
 	 	col.find('.col-content').data('valign', (column != null) ? column.valign : 'start')
 	 	col.find('.col-content').data('distribution', (column != null) ? column.distribution : 'wrap')
 	 	col.find('.title-col').html('Columna ' + n)
+	 	col.data('visible', (column != null) ? column.visible : 1)
 	 	col.find('.col-content').prop('id', 'col-' + id)
 
 	 	col.find('.edit-col')
@@ -903,84 +951,7 @@
 
 	 						modalDelete.openModal('modalDelete.php?id=' + id + '&del=column')
 			           })
-		//ver(['cols', cols])
-		switch(parseInt(cols)){
-			case 1:
-				col_n = 'col-12'
-			break
-			case 2:
-				col_n = 'col-12 col-md-6 col-lg-6'
-			break
-			case 3:
-				col_n = 'col-12 col-md-4 col-lg-4'
-			break
-			case 4:
-				col_n = 'col-12 col-md-6 col-lg-3'
-			break 
-			
-		}
-
-		if(EDITOR != 0){
-			col.addClass(col_n)
-		}else{
-
-			if(!isMobile()){
-				var w = 100
-
-				switch(device){
-					case 'desktop':
-						switch(parseInt(cols)){
-							case 1:
-								w = 100
-							break
-							case 2:
-								w = 50
-							break
-							case 3:
-								w = 100/3
-
-							break
-							case 4:
-								100/4
-
-							break 
-							
-						}
-
-					break
-					case 'tablet':
-						
-						if(orientation == 'portrait'){
-							w = 100
-						}else{
-							switch(parseInt(cols)){
-								case 1:
-									w = 100
-								break
-								case 2:
-									w = 50
-								break
-								case 3:
-									w = 100/3
-								break
-								case 4:
-									100/4
-								break 
-								
-							}
-						}
-					break
-					case 'smartphone':
-						w = 100
-					break
-				}
-
-			col.css('width', w + '%')
-			}else{
-				col.addClass(col_n)
-			}
-		}
-
+		
 		
 		col.find('.col-content').html(base64Decode(column.content))
 		
@@ -1002,9 +973,104 @@
 	 	return col
 	 }
 
+	 function configCols(fila){
+	 	var cols = 0
+	 	$(fila).find('.column').each(function(){
+	 		cols += parseInt($(this).data('visible'))
 
+	 	})
 
-	 function getFila(fila){
+	 	switch(cols){
+			case 1:
+				col_n = 'col-12'
+			break
+			case 2:
+				col_n = 'col-12 col-md-6 col-lg-6'
+			break
+			case 3:
+				col_n = 'col-12 col-md-4 col-lg-4'
+			break
+			case 4:
+				col_n = 'col-12 col-md-6 col-lg-3'
+			break 
+			
+		}
+
+		$(fila).find('.column').each(function(){
+	 		var col = $(this),
+	 			vis = parseInt(col.data('visible'))
+	 		col.removeClass('col-md-4 col-md-6 col-lg-3 col-lg-4 col-lg-6')	
+	 		if(vis == 0){
+	 			col.hide()
+	 		}else{
+	 			col.show()
+	 		}
+	 	
+
+			if(EDITOR != 0){
+				col.addClass(col_n)
+			}else{
+
+				if(!isMobile()){
+					var w = 100
+
+					switch(device){
+						case 'desktop':
+							switch(parseInt(cols)){
+								case 1:
+									w = 100
+								break
+								case 2:
+									w = 50
+								break
+								case 3:
+									w = 100/3
+
+								break
+								case 4:
+									100/4
+
+								break 
+								
+							}
+
+						break
+						case 'tablet':
+							
+							if(orientation == 'portrait'){
+								w = 100
+							}else{
+								switch(parseInt(cols)){
+									case 1:
+										w = 100
+									break
+									case 2:
+										w = 50
+									break
+									case 3:
+										w = 100/3
+									break
+									case 4:
+										100/4
+									break 
+									
+								}
+							}
+						break
+						case 'smartphone':
+							w = 100
+						break
+					}
+
+				col.css('width', w + '%')
+				}else{
+					col.addClass(col_n)
+				}
+			}
+		})
+	 }
+
+	 function getFila(fila, num){
 	 	var row = $('<li class="fila col-12 flex-col-start-start">\
 	 					<div class="fila-toolbar col-12 flex-row-between-center bg-light elevation-1 p-1 pl-2 pr-2">\
 				 			<h6 class="m-0 title-fila"></h6>\
@@ -1027,11 +1093,12 @@
 	 			{titulo: 'Columna 3'},
 	 			{titulo: 'Columna 4'}
 	 		],
-	 		num = $('.fila').length + 1,
+	 		
 	 		id = (fila != null) ? fila.id : 0,
 	 		title = (fila != null) ? fila.titulo : 'Título Fila ' + num,
 	 		cols = (fila != null) ? fila.columnas : 4
 	 	row.prop('id', 'fila-' + id)
+	 	row.data('num', num)
 	 	row.data('cols', cols)
 	 	row.find('.title').html(title)
 	 	setCss(row.find('.title'), fila.estilos_titulo)
@@ -1042,7 +1109,7 @@
 	 		row.find('.columnas').append(getColumna(col, i + 1, cols))
 	 	})
 	 	
-
+	 	configCols(row)
 	 	row.find('.fila-edit').data('toggle','tooltip')
 			           .prop('title', 'Editar Fila')
 			           .tooltip()
@@ -1344,6 +1411,8 @@
 	 		li.find('.column').each(function(i){
 
 	 			var col = $(this).find('.col-content'),
+	 				num = $(this).data('num'),
+	 				visible = $(this).data('visible'),
 	 				idcol = $(this).find('.col-content').prop('id').split('col-')[1]
 	 				elements = []
 	 			addFlag(col) //agrega editable
@@ -1363,17 +1432,17 @@
 	 				el.removeClass('editable selected')
 		 			
 	 			})
-	 			ver(['content', getCss(col)])
-	 			//ver(['files = ', 'col ' + i ,getFiles(col)])
+	 			//ver(['content', getCss(col)])
+	 			//ver(['files = ', 'col ' + col.data('num')])
 	 			columnas.push({
 	 					id: idcol,
-	 					numero: i + 1,	
+	 					numero: num,	
 	 					align: col.data('align'),
 	 					valign: col.data('valign'), 
 	 					distribution: col.data('distribution'),
 	 					clases: col.prop('class'),	
 	 					estilos: getCss(col),
-	 					
+	 					visible: visible,
 	 					//elements: elements, 
 	 					content: base64Encode(col.html())
 	 				})
@@ -1411,6 +1480,8 @@
 	 		if(data.result == SUCCESS){
 	 			message = type == 'save' ? 'Guardado con Éxito' : 'Elemento Removido'
 	 			swal('GUARDAR', message,'success').then((value) => {
+	 				
+
 	 				$('#content-editor').load('editor.php?editor=1')
 			  		//location.reload(true);
 				});
@@ -1423,9 +1494,14 @@
 	 	//ver(['send', TEMA])
 	 }
 
-	 function openModalGalery(image){
-	 	
-	 	$('#modal-galery').find('img').prop('src', image.prop('src'))
+	 function openModalGalery(medio){
+	 	var tag = medio.prop('tagName')
+	 	$('#modal-galery').find('img, iframe').hide()
+	 	if(tag == 'IMG'){
+	 		$('#modal-galery').find('img').prop('src', medio.prop('src')).show()
+	 	}else if(tag == 'IFRAME'){
+	 		$('#modal-galery').find('iframe').prop('src', medio.prop('src')).show()
+	 	}
 	 	$('#modal-galery').fadeIn(150)
 	 }
 
@@ -1445,7 +1521,12 @@
 	 			}
 	 		}
 	 		$('#modal-galery').data('pos', pos)
-	 		$('#modal-galery').find('img').prop('src', GALERY[pos])
+	 		if($('#modal-galery').find('img').css('display') != 'none'){
+	 			$('#modal-galery').find('img').prop('src', GALERY[pos])
+	 		}else if($('#modal-galery').find('iframe').css('display') != 'none'){
+	 			$('#modal-galery').find('iframe').prop('src', GALERY[pos])
+	 		}
+	 		
 
 	 	})
 	 }
@@ -1457,7 +1538,7 @@
 	 	var filas = TEMA.filas
 	 	$.each(filas, function(i, fila){
 	 		ver(['columnas', fila.columns])
-	 		$('#filas').append(getFila(fila))
+	 		$('#filas').append(getFila(fila, i))
 	 	})
 	 	
 	 	$('#modal-galery').find('#modal-galery-close').click(function(){
@@ -1479,14 +1560,37 @@
 	 				})
 	 		})
 	 	})
+
+	 	$('.video-galery').each(function(){
+	 		$(this).find('.box-gal').each(function(index){
+	 			$(this)
+	 				.data('pos', index)
+	 				.click(function(evt){
+	 					evt.stopPropagation()
+	 					$('#modal-galery').data('pos', $(this).data('pos'))
+	 					GALERY = []
+	 					$(this).closest('.video-galery').find('.box-gal').each(function(){
+	 						GALERY.push($(this).find('iframe').prop('src'))
+	 					})
+	 					openModalGalery($(this).find('iframe'))
+	 				})
+	 		})
+	 	})
 	 				
 	 	if(EDITOR != 0){
+	 		var action = '<?php print($action); ?>',
+	 			params = []
+	 		try{
+	 			params  = getJson('<?php print(toJson($params)); ?>')
+	 		}catch(e){}
 	 	 	setEditables()
+	 	 	
 	 	 }else{
 	 	 	$('.editable, .selected, .media-click').remove()
 
 	 	 }
-	 	//$('#tema').addClass('Demo')
+	 	
+	 	 loading(false)
 	 }
 
 	 function getActual(tag){

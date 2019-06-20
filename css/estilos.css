@@ -199,7 +199,7 @@ body{
   height: 100%
 }
 
-.galery{
+.galery, .video-galery{
   min-width: 100px;
   max-width: 100%;
   min-height: 100px;
@@ -207,6 +207,10 @@ body{
   padding: 5px;
   border: solid 1px gray;
   
+}
+
+.video-galery{
+    background: rgba(82, 82, 77, 1);
 }
 
 .img-gal-min{
@@ -236,6 +240,49 @@ body{
   height: 500px;
   margin:2px;
 }
+
+.video-gal-min{
+  width: 160px;
+  height: 90px
+}
+
+.video-gal-small{
+  width: 400px;
+  height: 225px
+}
+
+.video-gal-medium{
+  width: 640px;
+  height: 360px
+}
+
+.video-gal-big{
+  width: 100%;
+  height: auto
+}
+
+.box-gal{
+    position: relative;
+  }
+
+  .box-gal div{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top:0;
+    left: 0;
+    z-index: 10;
+    cursor: pointer;
+  }
+
+  .box-gal iframe{
+    width: 100%;
+    height: 100%;
+  }
+
+  #back{
+    font-size: 25px;
+  }
 
 
 table th, table td {

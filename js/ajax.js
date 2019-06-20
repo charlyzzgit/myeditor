@@ -36,15 +36,18 @@ function Ajax(){
 				try{
 					loading(false)
 				}catch(e){}
+
 				console.log(
-					'ERROR AJAX:',
-					'textStatus:' + textStatus, 
-					'error:' + error, 
-					'xhr.statusText:', xhr.statusText
+					'ERROR AJAX: ',
+					'textStatus: ' + textStatus, 
+					'error :' + error, 
+					'xhr.statusText: ', xhr.statusText
 					) 
-				var message = 'textStatus:' + textStatus + 
+				console.warn('warm', xhr)
+				console.error('error', xhr)
+				var message = 'textStatus: ' + textStatus + 
 					'\n, error: ' + error + 
-					'\n, xhr.statusText: ' + xhr.statusText
+					'\n, xhr.statusText : ' + xhr.statusText
 				swal('ERROR DE SISTEMA','Error al Procesar la Solicitud:' + message,'error')
 			},
 			success: function(data, textStatus, xhr){

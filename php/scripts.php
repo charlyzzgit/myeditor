@@ -14,7 +14,6 @@ function backup(){
 	setBackup('temas');
 	setBackup('filas');
 	setBackup('columnas');
-	setBackup('elements');
 	setBackup('estilos');
 }
 
@@ -22,7 +21,6 @@ function restore(){
 	getBackup('temas');
 	getBackup('filas');
 	getBackup('columnas');
-	getBackup('elements');
 	getBackup('estilos');
 }
 
@@ -41,70 +39,14 @@ function createTema(){
 	
 }
 
-function getTable($table, $idfila, $idcol, $tema){
 
-	for($i = 0; $i < count($table); $i++){
-		for($j = 0; $j < count($table[$i]['cells']); $j++){
-			for($k = 0; $k < count($table[$i]['cells'][$j]['elements']); $k++){
-				$el = $table[$i]['cells'][$j]['elements'][$k];
-				$save = saveElement($el, $idfila, $idcol, $tema);
-				$e = getJson($save);
-				$table[$i]['cells'][$j]['elements'][$k] = $e['id'];
-			}
-		}
-	}
-	
-	// foreach ($table as $key => $tr){
-	// 	$cells = $tr['cells'];
-	// 	foreach ($cells as $key1 => $cell){
-	// 		$cell['ides'] = array();
-	// 		$elements = $cell['elements'];
-	// 		foreach ($elements as $key2 => $el){ 
-	// 			//$save = saveElement($el, $idfila, $idcol, $tema);
-	// 			$e = getJson($save);
-	// 			$cell['ides'][] = $e['id'];
-	// 		}
-	// 	}
-	// }
-	return $table;
-}
 
 function setContent($content){
 	$content = str_replace(array("\r", "\n"), '', $content); //elimina renglones en blanco (los renglones en blanco no guradan en la db y dan errores)
 	return htmlentities(addslashes($content)); //permite codigo html
 }
 
-function saveElement($el, $idfila, $idcol, $tema){
-	$table = $el['table']; //getTable($el['table'], $idfila, $idcol, $tema);
-	$id = $el['id'];
-	$sql = new consulta();
-	$sql->addCampo('id_docente', $tema['id_docente']);
-	$sql->addCampo('id_curso', $tema['id_curso']);
-	$sql->addCampo('id_modulo', $tema['id_modulo']);
-	$sql->addCampo('id_clase', $tema['id_clase']);
-	$sql->addCampo('id_tema', $tema['id']);
-	$sql->addCampo('id_fila', $idfila);
-	$sql->addCampo('id_columna', $idcol);
-	$sql->addCampo('numero', $el['numero']);
-    $sql->addCampo('clases', $el['clases']);
-    $sql->addCampo('estilos', toJson($el['estilos']));
-    $sql->addCampo('tag', $el['tag']);
-    $sql->addCampo('content', (count($table) != 0 ? toJson($table) : ( $el['tag'] == 'UL' ? toJson($el['content']) : setContent($el['content']))));
-    $sql->addCampo('url', $el['url']);
-    $sql->addCampo('link', $el['link']);
-    if($id == 0){
-		$id = $sql->insert('elements');
-	}else{
-		$sql->addCondicion('id', $id);
-		$sql->update('elements');
-	}
 
-	if($sql->getSuccess()){
-		return toJson(array('result' => SUCCESS, 'id' => $id));
-	}else{
-		return toJson(array('result' => 'ERROR', 'message' => 'Error en Elemento: '.$sql->getError()));
-	}
-}
 
 function saveColumna($col, $idfila, $tema){
 	$id = $col['id'];
@@ -122,6 +64,7 @@ function saveColumna($col, $idfila, $tema){
     $sql->addCampo('clases', $col['clases']);
     $sql->addCampo('estilos', toJson($col['estilos']));
     $sql->addCampo('content', setContent($col['content']));
+    $sql->addCampo('visible', $col['visible']);
     if($id == 0){
 		$id = $sql->insert('columnas');
 	}else{
@@ -130,14 +73,7 @@ function saveColumna($col, $idfila, $tema){
 	}
 
 	if($sql->getSuccess()){
-		// $elements = $col['elements'];
-		// foreach ($elements as $key => $el) {
-		// 	$save = saveElement($el, $idfila, $id, $tema);
-		// 	$success = getJson($save);
-		// 	if($success['result'] != SUCCESS){
-		// 		return $save;
-		//     }
-		// }
+		
 		return toJson(array('result' => SUCCESS));
 	}else{
 		return toJson(array('result' => 'ERROR', 'message' => 'Error en Columna: '.$sql->getError()));
@@ -204,57 +140,88 @@ function savePageTema($tema){
 				return $save;
 		    }
 		}
-		//$d = clearFiles($tema);
+		$d = clearFiles($tema);
 		return toJson(array('result' => SUCCESS));
 	}else{
 		return toJson(array('result' => 'ERROR', 'message' => 'Error en Tema: '.$sql->getError()));
 	}
 }
 
-function removeElement(&$array, $name){
-	foreach ($array as $key => $value) {
-		if($value == $name){
-			unset($array[$key]);
-		}
-	}
 
-}
 
 function clearFiles($tema){
 	$dels = array();
 	$url = 'docente-'.$tema['id_docente'].'/curso-'.$tema['id_curso'].'/modulo-'.$tema['id_modulo'].'/clase-'.$tema['id_clase'].'/tema-'.$tema['id'].'/';
-	$files = getAllArchivos('../files/'.$url);
-	$images = getAllArchivos('../img/'.$url);
-	foreach ($tema['files'] as $key => $file) {
+	$files = getListFiles(getAllArchivos('../files/'.$url));
+	$images = getListFiles(getAllArchivos('../img/'.$url));
+
+	foreach($tema['files'] as $key => $file) {
 		if($file['dir'] == 'img'){
-			if(fileExists($images, $file['file'] )){
-				removeElement($images, $file['file']);
-			}
-		}else if($file['dir'] == 'files'){
-			if(fileExists($files, $file['file'] )){
-				removeElement($files, $file['file']);
-			}
+			mark($images, $file['file']);
+		}else if($file['dir'] == 'file'){
+			mark($files, $file['file']);
 		}
+	}	
 		
 		
-	}
+	
 
 	foreach ($images as $key => $image) {
-		delfoto('../img/'.$url.$image);
+		//alert('image: '.toJson($image));
+		if($image['del']){
+			delfoto('../img/'.$url.$image['file']);
+		}
+		
 	}
-
 	foreach ($files as $key => $file) {
-		delfoto('../files/'.$url.$file);
+		//alert('file: '.toJson($file));
+		if($file['del']){
+			delfoto('../img/'.$url.$file['file']);
+		}
+		
 	}
 
 	return $dels;
 }
+
+function getListFiles($arch){
+	$files = array();
+	foreach ($arch as $key => $file) {
+		$data['file'] = $file;
+		$data['del'] = true;
+		$files[] = $data;
+	}
+	return $files;
+}
+
+function mark(&$files, $file){
+	for($i = 0; $i < count($files); $i++) {
+		if($files[$i]['file'] == $file){
+			$files[$i]['del'] = false;
+			break;
+		}
+	}
+}
+
+
 
 function getCss($style){
 
 	return $style != NULL ? getJson($style) : array();
 }
 
+
+function getTemas($idclase){
+	$sql = new consulta();
+	$sql->addCondicion('id_clase', $idclase);
+	$res = $sql->readSql('temas');
+	$temas = array();
+	while($reg = getreg($res)){
+		$temas[] = $reg;
+	}
+	
+	return $temas;
+}
 
 function getTema($id){
 	$sql = new consulta();
@@ -283,71 +250,20 @@ function getFilas($idtema){
 function getColumnas($idfila){
 	$sql = new consulta();
 	$sql->addCondicion('id_fila', $idfila);
+	$sql->orderBy('numero asc');
 	$res = $sql->readSql('columnas');
 	$columnas = array();
 	while($reg = getreg($res)){
-		$reg->elements = getElements($reg->id);
+		//$reg->elements = getElements($reg->id);
 		$reg->estilos = getCss($reg->estilos);
 		$columnas[] = $reg;
 	}
 	return $columnas;
 }
 
-function getContent($reg){
-	$content = '';
-	switch($reg->tag){ 
-		case'TABLE': return getJson($reg->content); //$table;
-		case'UL': return getJson($reg->content); //$table;
-		default: return  ($reg->content);
-	}
-}
-
-function getElements($idcol){
-	$sql = new consulta();
-	$sql->addCondicion('id_columna', $idcol);
-	$res = $sql->readSql('elements');
-	$elements = array();
-	while($reg = getreg($res)){
-		$reg->estilos = getCss($reg->estilos);
-		$reg->content = getContent($reg);
-		$elements[] = $reg;
-	}
-	return $elements;
-}
-
-function getElement($id){
-	$sql = new consulta();
-	$sql->addCondicion('id', $id);
-	return getreg($sql->readSql('elements'));
-	
-}
 
 
-function deleteElement($id){
-	//antes borrar imagenes y archivos asociados
-	$sql = new consulta();
-	$sql->addCondicion('id', $id);
-	$sql->delete('elements');
 
-	if($sql->getSuccess()){
-		return toJson(array('result' => SUCCESS));
-	}else{
-		return toJson(array('result' => 'ERROR', 'message' => $sql->getError()));
-	}
-}
-
-
-function emptyColumna($id){
-	$sql = new consulta();
-	$sql->addCondicion('id_columna', $id);
-	$sql->delete('elements');
-
-	if($sql->getSuccess()){
-		return toJson(array('result' => SUCCESS));
-	}else{
-		return toJson(array('result' => 'ERROR', 'message' => $sql->getError()));
-	}
-}
 
 function deleteFila($id){
 	//antes borrar imagenes y archivos asociados
@@ -393,12 +309,12 @@ function getOldName($url, $sep){
 
 function saveImage($request, $files){
 	$idtema = getPost($request, 'idtema', 0);
-	$idelement = getPost($request, 'idelement', 0);
+	//$idelement = getPost($request, 'idelement', 0);
 	$file = getPost($files, 'image', NULL);
-	$element = getElement($idelement);
+	//$element = getElement($idelement);
 	$tema = getTema($idtema);
 	$dir = '../img/docente-'.$tema->id_docente.'/curso-'.$tema->id_curso.'/modulo-'.$tema->id_modulo.'/clase-'.$tema->id_clase.'/tema-'.$tema->id.'/';
-	$name = $element != NULL ? getOldName($element->content, 'image') : 'image-'.date('Y-m-d').'_'.date('H-i-s');
+	$name = 'image-'.date('Y-m-d').'_'.date('H-i-s');
 	createDir($dir);
 	$img = saveFile($dir, $file, $name);
 	if($img != NULL){
