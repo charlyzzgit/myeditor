@@ -50,12 +50,13 @@
 			case 'var':
 			case 'time':
 			case 'mark':
+			case 'p':
  				elem = $('<' + tag + '>Nuevo Texto</' + tag + '>')
  			break
- 			case 'p':
- 				elem = $('<' + tag + '>Nuevo Texto Enriquecido</' + tag + '>')
- 				elem.addClass('multi-text')
+ 			case 'pre':
+ 				elem = $('<' + tag + '>Nuevo Bloque de Código</' + tag + '>')
  			break
+ 			
  			case 'icon':
  				elem = $('<i class="icon-editor fas fa-circle"></i>')
  			break
@@ -137,6 +138,10 @@
  			case 'videoGalery':
  				elem = $('<div class="video-galery"></div>')
  				
+ 			break
+ 			case 'edittext':
+ 				elem = $('<div class="flex-row-start-start flex-wrap edit-text"></div>')
+ 				elem.append('<span>Texto Enriquecido</span>')
  			break
  		}
 

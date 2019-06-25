@@ -44,7 +44,8 @@
 		{ name:'Subíndice', value: 'sub'},
 		{ name:'Variable', value: 'var'},
 		{ name:'Fecha/Hora', value: 'time'},
-		{ name:'Resaltado', value: 'mark'}
+		{ name:'Resaltado', value: 'mark'},
+		{ name:'Bloque de Código', value: 'pre'}
 	],
 
  	box = '<?php print($box); ?>',

@@ -9,7 +9,7 @@
 		<div id="shadow-y" class="col-12 mt-3"></div>
 	</div>
 	<div class="sector col-4 flex-col-start-center border p-5">
-		<div id="shadow-color" class="col-12 mt-3"></div>
+		<div id="shadow-color" class="col-12 flex-row-between-center mt-3"></div>
 		<div id="shadow-inset" class="col-12 mt-3"></div>
 	</div>
 	<div class="sector col-4 flex-col-start-center border p-5">
@@ -121,4 +121,6 @@ $('#form-tool').form({
 		inputs: inputs,
 		minimize:true
 })
+
+$('#shadow-color').append(getPalette())  
 </script>

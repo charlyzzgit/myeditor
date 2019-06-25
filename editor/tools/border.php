@@ -11,31 +11,31 @@
 <div id="form-tool" class="col-12 flex-row-center-start">
 	<div class="sector flex-row-center-start flex-wrap border p-2">
 		<div class="side col-12 flex-row-center-center mb-2">Uniforme</div>
-		<div id="border-color" class="col-12"></div>
+		<div id="border-color" class="col-12 flex-row-between-center"></div>
 		<div id="border-style" class="col-6"></div>
 		<div id="border-width" class="col-6 border-dark"></div>
 	</div>
 	<div class="sector flex-row-center-start flex-wrap border p-2">
 		<div class="side col-12 flex-row-center-center mb-2">Superior</div>
-		<div id="border-color-top" class="col-12"></div>
+		<div id="border-color-top" class="col-12 flex-row-between-center"></div>
 		<div id="border-style-top" class="col-6"></div>
 		<div id="border-width-top" class="col-6 border-dark"></div>
 	</div>
 	<div class="sector flex-row-center-start flex-wrap border p-2">
 		<div class="side col-12 flex-row-center-center mb-2">Inferior</div>
-		<div id="border-color-bottom" class="col-12"></div>
+		<div id="border-color-bottom" class="col-12 flex-row-between-center"></div>
 		<div id="border-style-bottom" class="col-6"></div>
 		<div id="border-width-bottom" class="col-6 border-dark"></div>
 	</div>
 	<div class="sector flex-row-center-start flex-wrap border p-2">
 		<div class="side col-12 flex-row-center-center mb-2">Izquierdo</div>
-		<div id="border-color-left" class="col-12"></div>
+		<div id="border-color-left" class="col-12 flex-row-between-center"></div>
 		<div id="border-style-left" class="col-6"></div>
 		<div id="border-width-left" class="col-6 border-dark"></div>
 	</div>
 	<div class="sector flex-row-center-start flex-wrap border p-2">
 		<div class="side col-12 flex-row-center-center mb-2">Derecho</div>
-		<div id="border-color-right" class="col-12"></div>
+		<div id="border-color-right" class="col-12 flex-row-between-center"></div>
 		<div id="border-style-right" class="col-6"></div>
 		<div id="border-width-right" class="col-6 border-dark"></div>
 	</div>
@@ -204,6 +204,12 @@
 			inputs: inputs,
 			minimize:true
 	})
+
+	$('#border-color').append(getPalette())  
+	$('#border-color-top').append(getPalette())  
+	$('#border-color-bottom').append(getPalette())  
+	$('#border-color-left').append(getPalette())  
+	$('#border-color-right').append(getPalette())  
 
 	
 </script>

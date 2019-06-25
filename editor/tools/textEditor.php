@@ -27,6 +27,7 @@
 
 <script>
 	'use strict'
+	//alert(OBJ.html())
 	$('#editor').html(OBJ.html())
 	var ckeditor = CKEDITOR//.replace('editor')
 	//CKFinder.setupCKEditor(ckeditor, '../ckfinder')

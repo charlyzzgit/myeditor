@@ -317,7 +317,7 @@
 			  })
 	$.each(bg.chanels, function(i, chanel){
 		var ch = i + 1
-		$('#bg-' + ch).fadeTo(150, chanel.active ? 1 : 0)
+		$('#bg-' + ch).fadeTo(150, chanel.active ? 1 : 0).append(getPalette())
 		$('#deg-' + ch).fadeTo(150, chanel.active ? 1 : 0)
 	})
 	

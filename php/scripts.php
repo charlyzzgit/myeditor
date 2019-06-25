@@ -24,10 +24,14 @@ function restore(){
 	getBackup('estilos');
 }
 
-function createTema(){
+function createTema($request){
 	$sql = new consulta();
-	$sql->addCampo('titulo', 'Tema');
-	$sql->addCampo('numero', 1);
+	$sql->addCampo('id_docente', getPost($request, 'iddocente', NULL));
+	$sql->addCampo('id_curso', getPost($request, 'idcurso', NULL));
+	$sql->addCampo('id_modulo', getPost($request, 'idmodulo', NULL));
+	$sql->addCampo('id_clase', getPost($request, 'idclase', NULL));
+	$sql->addCampo('titulo', getPost($request, 'titulo', NULL));
+	$sql->addCampo('numero', getPost($request, 'num', 0));
 	$sql->insert('temas');
 	if($sql->getSuccess()){
 		$response = toJson(array('result' => 'OK'));
@@ -353,14 +357,14 @@ function saveEstilo($request){
 	if($id == 0){
 		$sql->addCampo('id_docente', getPost($request, 'iddocente', 0));
 		$sql->addCampo('name', getPost($request, 'name', 0));
-		$sql->insert('estilos');
+		$id = $sql->insert('estilos');
 	}else{
 		$sql->addCondicion('id', $id);
 		$sql->update('estilos');
 	}
 
 	if($sql->getSuccess()){
-		return toJson(array('result' => SUCCESS));
+		return toJson(array('result' => SUCCESS, 'id' => $id, 'estilos' => getEstilos(getPost($request, 'iddocente', 0))));
 	}else{
 		return toJson(array('result' => 'ERROR', 'message' => $sql->getError()));
 	}

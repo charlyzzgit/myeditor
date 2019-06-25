@@ -19,7 +19,19 @@
 
 <script>
 	'use strict'
-	var inputs = [
+	var size = 'small'
+	if(OBJ.hasClass('img-mini')){
+		size = 'mini'
+	}else if(OBJ.hasClass('img-small')){
+		size = 'small'
+	}else if(OBJ.hasClass('img-medium')){
+		size = 'medium'
+	}else if(OBJ.hasClass('img-big')){
+		size = 'big'
+	}else if(OBJ.hasClass('img-full')){
+		size = 'full'
+	}
+	var	inputs = [
 		{
           box: 'image',
           type: 'image',
@@ -54,18 +66,18 @@
 			box:'size',
 			type: 'radio',
 			options:[
-				{name:'Muy Chica', value: 'img-mini'},
-				{name:'Chica', value: 'img-small'},
-				{name:'Mediano', value: 'img-medium'},
-				{name:'Grande', value: 'img-big'},
-				{name:'Full', value: 'img-full'}
+				{name:'Muy Chica', value: 'mini'},
+				{name:'Chica', value: 'small'},
+				{name:'Mediano', value: 'medium'},
+				{name:'Grande', value: 'big'},
+				{name:'Full', value: 'full'}
 			],
 			label: 'Tamaño Fijo:',
 			name: 'size',
-			value: 'small',
+			value: size,
 			callBack: function(value, data){
 				
-				OBJ.removeClass('img-mini img-small img-medium img-big img-full').addClass(value)
+				OBJ.removeClass('img-mini img-small img-medium img-big img-full').addClass('img-' + value)
 			}
 		},
 		{

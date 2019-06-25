@@ -39,7 +39,8 @@
 
 	var btns = [
 		{name: 'Texto', tag: 'span', icon:'fa fa-text-height'},
-		{name: 'Texto Enriquecido', tag: 'p', icon:'fa fa-paragraph'},
+		{name: 'Texto Enriquecido', tag: 'edittext', icon:'fa fa-paragraph'},
+		{name: 'Bloque de Código', tag: 'pre', icon:'fas fa-code'},
 		{name: 'Link', tag: 'a', icon:'fa fa-link'},
 		{name: 'Lista', tag: 'ul', icon:'fa fa-list-ul'},
 		{name: 'Tabla', tag: 'table', icon:'fa fa-table'},

@@ -918,11 +918,11 @@ function loadVideo(lista_videos, id_video, url){
 
 
 function base64Encode(data){
-	return btoa(data)
+	return btoa(unescape(encodeURIComponent(data)))
 }
 
 function base64Decode(data){
-	return atob(data)
+	return decodeURIComponent(escape(atob(data)))
 }
 
 

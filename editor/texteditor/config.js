@@ -44,6 +44,7 @@ CKEDITOR.editorConfig = function( config ) {
 
 	config.uiColor = '#CCE5FF';
 	config.extraPlugins = 'codesnippet';
+	config.extraPlugins = 'insertpre';
 	config.removePlugins = 'Save,Print,Preview,Find,About,Maximize,ShowBlocks';
 				// config.toolbarGroups = [
 };

@@ -32,6 +32,9 @@ switch($action){
 		echo savePageTema($tema);
 	break;
 	
+	case 'newTema':
+		echo createTema($request);
+	break;
 	
 	case 'delFila':
 		echo deleteFila(getPost($request, 'idfila', NULL));

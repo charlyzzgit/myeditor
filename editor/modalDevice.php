@@ -48,6 +48,6 @@
 		$('#exit').trigger('click')
 		var dvc = $(this).data('device'),
 			ori = $(this).data('orientation')
-		blank('demo.php?device=' + dvc + '&orientation=' + ori)
+		blank('demo.php?device=' + dvc + '&orientation=' + ori + '&id=' + TEMA.id)
 	})
 </script>

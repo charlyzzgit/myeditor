@@ -411,4 +411,9 @@
 		$('#font-family').hide()
 	}
 	ver(['elem:', elem])
+
+	
+	$('#font-color').append(getPalette())
+	$('#font-shadow-color').append(getPalette())
+	$('#font-border-color').append(getPalette())
 </script>

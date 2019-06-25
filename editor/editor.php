@@ -2,9 +2,10 @@
 	error_reporting(1);
 	require '../php/scripts.php';
 	$request = $_REQUEST;
+	$editor = getPost($request, 'editor', 0);
 	$device = getPost($request, 'device', NULL);
 	$orientation = getPost($request, 'orientation', 'portrait');
-	$id = 1;
+	$id = getPost($request, 'id', 0);;
 	$tema = getTema($id);
 
 	$estilos = getEstilos($tema->id_docente);
@@ -34,7 +35,10 @@
 	.column-hover{
 		border: dotted thin lightgray;
 	}
-
+	
+	.column-hover:hover{
+		border: dotted thin blue !important;
+	}
 	
 
 	.icon{
@@ -45,6 +49,8 @@
 		font-size: 30px;
 
 	}
+
+	
 
 	.editable:hover{
 		border:dotted medium red;
@@ -184,6 +190,12 @@
 		opacity: 1;
 	}
 
+	.fila-toolbar, .column-toolbar{
+		background: rgba(255, 255, 255, .5) !important
+	}
+
+	
+
 	<?php
 		
 		foreach ($estilos as $key => $estilo) { 
@@ -219,7 +231,7 @@
 	
 </div>
 <div id="modal-class" class="col-12 flex-col-start-center">
-	<div class="col-12 text-center bg-pimary text-white p-2">
+	<div class="col-12 text-center bg-primary text-white p-2">
 		Vista Previa de Clase
 		<i id="close-class" class="fa fa-times mr-2 hand cerrar"></i>
 	</div>
@@ -255,6 +267,7 @@
 			<i class="fab fa-css3-alt mr-1"></i>
 			<span>Estilos Personalizados</span>
 		</button>
+		
 		<i class="fa fa-times mr-2 hand cerrar"></i>
 	</div>
 	<menu id="menu-bar" class="col-12 flex-row-start-center m-0">
@@ -304,6 +317,7 @@
 		modalDelClass,
 		modalDelGal,
 		modalHelp,
+		modalColor,
 		menu = [
 			{name: 'texto', value:'text'},
 			{name: 'fondo', value:'background'},
@@ -381,6 +395,14 @@
       	})
 	}
 
+	if(modalColor == null){
+		modalColor = new Modal({
+        	title: 'Colores Predefinidos',
+        	size: 'medium',
+        	bg: 'bg-primary'
+      	})
+	}
+
 	ver(['tema', TEMA])	
 	function setMenu(tag){
 		
@@ -435,6 +457,7 @@
 			case 'time':
 			case 'mark':
 			case 'p':
+			case 'pre':
 				menu = [
 					{name: 'texto', value:'text'},
 					{name: 'etiqueta', value:'label'},
@@ -675,6 +698,21 @@
 					]
 				}
 
+				if(OBJ.hasClass('edit-text')){
+					menu = [
+						//{name: 'texto', value:'text'},
+						{name: 'multitexto', value:'textEditor'},
+						{name: 'fondo', value:'background'},
+						{name: 'borde', value:'border'},
+						{name: 'margen', value:'margin'},
+						{name: 'relleno', value:'padding'},
+						{name: 'sombra', value:'shadow'},
+						{name: 'insertar', value:'insert'},
+						{name: 'restablecer', value:'reset'},
+						{name: 'eliminar', value:'delete'}
+					]
+				}
+
 			break
 
 			default:
@@ -759,7 +797,22 @@
  		
  	}
 
+ 	function getPalette(){
+ 		var btn = $('<button class="btn btn-sm btn-warning ml-2 mt-3"><i class="fas fa-palette"></i></button>')
+ 		btn.click(function(){
+ 			var parent = $(this).parent(),
+ 				input = parent.find('input').prop('name')
+ 			modalColor.openModal('tools/modalColor.php?input=' + input)	
+ 		}).data('toggle','tooltip')
+		  .prop('title', 'Colores Predefinidos')
+		  .tooltip()
+ 		return btn
+ 	}
+
  	function config(){
+
+ 		
+
  		$('#modal-edit').find('.cerrar').click(function(){
  			openEditor(false)
  			openClass(false)
@@ -826,6 +879,7 @@
 			           .tooltip()
 			           .click(function(){
 			           	  $('#filas').append(getFila(null, $('.fila').length))
+			           	  $('html, body').animate({scrollTop: 5000}, 150)
 			           })
 
 		$('.save').data('toggle','tooltip')
@@ -880,6 +934,8 @@
 	 			$('#modal-save-class').hide()
 	 		}
 	 	})
+
+	 	$('#content-editor').css('padding-bottom', '300px')
 	 }
 
 	 function setEditables(){
@@ -920,7 +976,7 @@
 	 	col.find('.title-col').html('Columna ' + n)
 	 	col.data('visible', (column != null) ? column.visible : 1)
 	 	col.find('.col-content').prop('id', 'col-' + id)
-
+	 	ver(['column: ', column])
 	 	col.find('.edit-col')
 	 				   .data('toggle','tooltip')
 			           .prop('title', 'Editar Propiedades Columna')
@@ -953,19 +1009,24 @@
 			           })
 		
 		
-		col.find('.col-content').html(base64Decode(column.content))
 		
 		
-		if(EDITOR != 0){
-			setElements(col.find('.col-content'))
-		}
+		
+		
 		if(n > cols){
 			col.hide()
 		}
 
-		if(column != null){	           
+		if(column != null){	  
+			ver(['content', base64Decode(column.content)])        
+			col.find('.col-content').html(base64Decode(column.content)) 
 	 		setCss(col.find('.col-content'), column.estilos)
+
 	 	}
+
+	 	if(EDITOR != 0){
+			setElements(col.find('.col-content'))
+		}
 
 	 	if(EDITOR == 0){
 	 		col.find('.column-toolbar').remove()
@@ -974,12 +1035,14 @@
 	 }
 
 	 function configCols(fila){
-	 	var cols = 0
+	 	var cols = 0,
+	 		col_n = 'col-12'
 	 	$(fila).find('.column').each(function(){
+
 	 		cols += parseInt($(this).data('visible'))
 
 	 	})
-
+	 	
 	 	switch(cols){
 			case 1:
 				col_n = 'col-12'
@@ -1028,7 +1091,7 @@
 
 								break
 								case 4:
-									100/4
+									w = 100/4
 
 								break 
 								
@@ -1087,23 +1150,34 @@
 					 		<ul class="columnas col-12 flex-row-start-start flex-wrap m-0"></ul>\
 					 	</div>\
 				 	</li>'),
-	 		columns = (fila != null) ? fila.columns : [
-	 			{titulo: 'Columna 1'},
-	 			{titulo: 'Columna 2'},
-	 			{titulo: 'Columna 3'},
-	 			{titulo: 'Columna 4'}
-	 		],
+	 		columns = (fila != null) ? fila.columns : [null, null, null, null],
 	 		
 	 		id = (fila != null) ? fila.id : 0,
 	 		title = (fila != null) ? fila.titulo : 'Título Fila ' + num,
-	 		cols = (fila != null) ? fila.columnas : 4
+	 		cols = (fila != null) ? fila.columnas : 4,
+	 		estilosTitulo = (fila != null) ? fila.estilos_titulo : []
 	 	row.prop('id', 'fila-' + id)
 	 	row.data('num', num)
 	 	row.data('cols', cols)
 	 	row.find('.title').html(title)
-	 	setCss(row.find('.title'), fila.estilos_titulo)
+	 	setCss(row.find('.title'), estilosTitulo)
 	 	if(EDITOR != 0){
 	 		row.find('.title').addClass('editable')
+	 		if(fila == null){
+	 			row.find('.title').click(function(evt){
+			 		evt.preventDefault()
+			 		evt.stopPropagation()
+			 		OBJ = $(this)
+			 		var tag = OBJ.prop('tagName').toLowerCase()
+			 		ver(['no text', OBJ.data('only-text')])
+			 		if(OBJ.data('only-text') != null){
+			 			tag = 'title'
+			 		}
+			 		setMenu(tag)
+			 		
+					openEditor(true)
+			 	})
+	 		}
 	 	}
 	 	$.each(columns, function(i, col){
 	 		row.find('.columnas').append(getColumna(col, i + 1, cols))
@@ -1395,6 +1469,12 @@
 	 	})
 	 }
 
+	 function clearTable(table){
+	 	table.find('tr, th, td').removeClass('editable selected')
+	 	table.find('th').children().removeClass('editable selected')
+	 	table.find('td').children().removeClass('editable selected')
+	 }
+
 	 function save(type){
 	 	TEMA.estilos = getCss($('#tema'))
 	 	TEMA.clases = $('#tema').prop('class')
@@ -1422,9 +1502,11 @@
 	 					clases = $(this).prop('class')
 	 				if($(this).hasClass('scroll-table')){
 	 					el = $(this).find('table')
+	 					clearTable(el)
 	 				}
 	 				if($(this).hasClass('media-box')){
 	 					$(this).removeClass('editable selected')
+	 					$(this).find('.media-click').remove()
 	 					el = $(this).find('.media')
 	 					clases = $(this).prop('class')
 	 				}
@@ -1434,6 +1516,7 @@
 	 			})
 	 			//ver(['content', getCss(col)])
 	 			//ver(['files = ', 'col ' + col.data('num')])
+	 			col.removeClass('column-hover')
 	 			columnas.push({
 	 					id: idcol,
 	 					numero: num,	
@@ -1464,7 +1547,7 @@
 	 		//ver(['estilos fila', getCss(li.find('.fila-content'))])
 	 		TEMA.filas.push(fila)
 	 	})
-
+	 	
 	 	TEMA.files = FILES
 	 	ver(['FILES', TEMA.files])
 	 	var aj = new Ajax()
@@ -1482,7 +1565,7 @@
 	 			swal('GUARDAR', message,'success').then((value) => {
 	 				
 
-	 				$('#content-editor').load('editor.php?editor=1')
+	 				$('#content-editor').load('editor.php?editor=1&id=' + TEMA.id)
 			  		//location.reload(true);
 				});
 	 		}else{
@@ -1578,15 +1661,17 @@
 	 	})
 	 				
 	 	if(EDITOR != 0){
-	 		var action = '<?php print($action); ?>',
-	 			params = []
-	 		try{
-	 			params  = getJson('<?php print(toJson($params)); ?>')
-	 		}catch(e){}
+	 		// var action = '<?php print($action); ?>',
+	 		// 	params = []
+	 		// try{
+	 		// 	params  = getJson('<?php print(toJson($params)); ?>')
+	 		// }catch(e){}
 	 	 	setEditables()
 	 	 	
 	 	 }else{
-	 	 	$('.editable, .selected, .media-click').remove()
+	 	
+	 	 	$('.col-content').removeClass('column-hover')
+
 
 	 	 }
 	 	
@@ -1594,10 +1679,10 @@
 	 }
 
 	 function getActual(tag){
-	 	if(tag == 'pre'){
-	 		tag = OBJ.children().prop('tagName').toLowerCase()
+	 	// if(tag == 'pre'){
+	 	// 	tag = OBJ.children().prop('tagName').toLowerCase()
 
-	 	}
+	 	// }
 	 	switch(tag){
 	 		case 'span': return 'Texto'; 
  			case 'h1': return 'Encabezado 1';
@@ -1649,7 +1734,7 @@
 	$('#media-editor').hide()
 	 setTema()
 	 
-	 
+	
 
  </script>
 

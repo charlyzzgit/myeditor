@@ -35,13 +35,19 @@
 
 <script>
 	
+	function classEncode(c){
+		return 'Editor-' + c
+	}
 
+	function classDecode(c){
+		return  c.split('Editor-')[1]
+	}
 
 	function getOptionStyle(e){
 		var option = $('<option></option>')
 		option
 			.val(e != null ? e.id : '')
-			.text(e != null ? e.name : 'Seleccionar Estilo')
+			.text(e != null ? classDecode(e.name) : 'Seleccionar Estilo')
 		if(e != null){
 			option.addClass(e.name)
 		}
@@ -74,6 +80,15 @@
 				loadEstilos()
 			}
 		})
+	}
+
+	function estiloExists(name){
+		for(var i = 0; i < ESTILOS.length; i++){
+			if(ESTILOS[i].name == classEncode(name)){
+				return true
+			}
+		}
+		return false
 	}
 
 
@@ -113,19 +128,19 @@
 	$('#btn-newclass').click(function(){
 		var input = $('#name-class')
 		input.closest('.form-group').find('.form-error').remove()
-		if(input.val() != ''){
+		if(input.val() != '' && !estiloExists(input.val())){
 			var aj = new Ajax()
 			aj.add('action', 'saveEstilo')
 			aj.add('iddocente', TEMA.id_docente)
 			aj.add('idestilo', 0) 
-			aj.add('name', input.val()) 
+			aj.add('name', classEncode(input.val()))
 			aj.add('estilos', toJson(getCss(OBJ)))
 			loading(true)
 			aj.send('../php/main.php', function(data){
 				loading(false)
 				if(data.result == SUCCESS){
 					OBJ.data('id-estilo', data.id)
-					alert(data.id)
+					ESTILOS = data.estilos
 					var e = getEstilo(parseInt(data.id))
 					
 					setMenu('css')
@@ -140,13 +155,14 @@
 				}
 			})
 		}else{
+			var msg = estiloExists(input.val()) ? 'El Nombre Insertado ya existe para otro estilo' : 'No se asignó un Nombre de estilo'
 			input
 				.addClass('alert-danger')
 				.focus(function(){
 					$(this).removeClass('alert-danger')
 					$(this).closest('.form-group').find('.form-error').remove()
 				})
-			input.after('<b class="form-error text-danger">No se asignó un Nombre de estilo</b>')
+			input.after('<b class="form-error text-danger">' + msg + '</b>')
 		}
 	})
 
@@ -160,7 +176,7 @@
 				setCss(OBJ, e.estilos)
 				OBJ.data('id-estilo', e.id)
 				setMenu('css')
-				$('#class-preview').text(e.name)
+				$('#class-preview').text(classDecode(e.name))
 				$('#important').bootstrapSwitch('state', parseInt(e.important) == 1 ? true : false)
 	 			openClass(true)
 				openEditor(true)
